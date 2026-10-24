@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Deluxe - Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Deluxe</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="rooms.html" class="nav-link">Rooms</a></li>
+            <li class="nav-item"><a href="restaurant.html" class="nav-link">Restaurant</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+            <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+            <li class="nav-item active"><a href="login.html" class="nav-link">Login</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero-wrap" style="background-image: url('images/bg_1.jpg');">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
+          <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+            <div class="text">
+              <p class="breadcrumbs mb-2"><span class="mr-2"><a href="index.html">Home</a></span> <span>Login</span></p>
+              <h1 class="mb-4 bread">Login</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="ftco-section contact-section bg-light">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <ul class="nav nav-tabs mb-4" role="tablist">
+              <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#tab-login">Login</a></li>
+              <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#tab-register">Register</a></li>
+            </ul>
+
+            <div id="alert-box" class="alert d-none" role="alert"></div>
+
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="tab-login">
+                <form id="login-form" class="bg-white p-5 contact-form">
+                  <div class="form-group">
+                    <input type="text" id="login-username" class="form-control" placeholder="Username" required>
+                  </div>
+                  <div class="form-group">
+                    <input type="password" id="login-password" class="form-control" placeholder="Password" required>
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Login" class="btn btn-primary py-3 px-5">
+                  </div>
+                </form>
+              </div>
+
+              <div class="tab-pane fade" id="tab-register">
+                <form id="register-form" class="bg-white p-5 contact-form">
+                  <div class="form-group">
+                    <input type="text" id="reg-username" class="form-control" placeholder="Username (min 3)" required minlength="3">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" id="reg-fullname" class="form-control" placeholder="Full name">
+                  </div>
+                  <div class="form-group">
+                    <input type="email" id="reg-email" class="form-control" placeholder="Email" required>
+                  </div>
+                  <div class="form-group">
+                    <input type="password" id="reg-password" class="form-control" placeholder="Password (min 6)" required minlength="6">
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Register" class="btn btn-primary py-3 px-5">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>
+

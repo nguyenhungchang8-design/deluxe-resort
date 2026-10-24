@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Deluxe - Access Denied</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="hero-wrap" style="background-image: url('images/bg_1.jpg');">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-center justify-content-center" style="height:100vh">
+          <div class="col-md-9 text-center">
+            <h1 class="mb-4 bread">403 - Access Denied</h1>
+            <p class="mb-4">Ban khong co quyen truy cap trang nay.</p>
+            <a href="#" id="go-home" class="btn btn-primary py-3 px-5">Ve trang cua toi</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+      document.getElementById('go-home').addEventListener('click', function (e) {
+        e.preventDefault();
+        var u = getUser();
+        window.location.href = u ? homeFor(u.role) : 'login.html';
+      });
+    </script>
+  </body>
+</html>
