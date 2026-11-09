@@ -1,9 +1,8 @@
 package com.deluxe.config;
 
-import com.deluxe.feature1_auth.model.User;
-import com.deluxe.feature1_auth.repository.UserRepository;
+import com.deluxe.entity.User;
+import com.deluxe.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -59,15 +58,53 @@ public class SecurityConfig {
             .cors(c -> c.configurationSource(corsSource()))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(a -> a
+                // 1. Tai nguyen tinh (CSS, JS, Fonts, Images)
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/scss/**").permitAll()
+                .requestMatchers("/favicon.ico", "/error").permitAll()
+
+                // 2. Cac trang web ngoai portal: cong khai danh cho Khach vang lai (Guest)
+                .requestMatchers(
+                    "/", "/index.html",
+                    "/about.html",
+                    "/rooms.html", "/rooms-single.html",
+                    "/restaurant.html"
+                ).permitAll()
+
+                // 3. Trang Dang nhap & Dang ky (portal/auth) va API auth
+                .requestMatchers("/portal/auth/**").permitAll()
                 .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/logout").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/reception/**").hasAnyRole("ADMIN", "RECEPTIONIST")
-                .requestMatchers("/api/housekeeping/**").hasAnyRole("ADMIN", "HOUSEKEEPING", "RECEPTIONIST")
-                .requestMatchers("/api/accounting/**").hasAnyRole("ADMIN", "ACCOUNTANT")
-                .requestMatchers("/api/waiter/**").hasAnyRole("ADMIN", "WAITER")
-                .requestMatchers("/api/**").authenticated()
-                .anyRequest().permitAll())
-            .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+
+                // 4. Bao ve cac thu muc chuc nang sau trong portal/ va api tuong ung theo Role
+                .requestMatchers("/portal/admin/**", "/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/portal/reception/**", "/api/reception/**").hasAnyRole("ADMIN", "RECEPTIONIST")
+                .requestMatchers("/portal/housekeeping/**", "/api/housekeeping/**").hasAnyRole("ADMIN", "HOUSEKEEPING", "RECEPTIONIST")
+                .requestMatchers("/portal/accountant/**", "/api/accounting/**").hasAnyRole("ADMIN", "ACCOUNTANT")
+                .requestMatchers("/portal/waiter/**", "/api/waiter/**").hasAnyRole("ADMIN", "WAITER")
+                .requestMatchers("/portal/customer/**").hasAnyRole("ADMIN", "CUSTOMER")
+
+                // 5. Tat ca cac duong dan con lai trong portal/** va api/** bat buoc phai dang nhap
+                .requestMatchers("/portal/**", "/api/**").authenticated()
+
+                // 6. Cac request khac
+                .anyRequest().permitAll()
+            )
+            .exceptionHandling(e -> e
+                .authenticationEntryPoint((request, response, authException) -> {
+                    if (request.getRequestURI().startsWith("/api/")) {
+                        response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/portal/auth/login.html");
+                    }
+                })
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    if (request.getRequestURI().startsWith("/api/")) {
+                        response.sendError(HttpStatus.FORBIDDEN.value(), "Forbidden");
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/portal/auth/access-denied.html");
+                    }
+                })
+            )
             .httpBasic(AbstractHttpConfigurer::disable)
             .formLogin(AbstractHttpConfigurer::disable);
         return http.build();
@@ -83,31 +120,6 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource src = new UrlBasedCorsConfigurationSource();
         src.registerCorsConfiguration("/**", cfg);
         return src;
-    }
-
-    /** Tao tai khoan mac dinh cho tung role (mat khau: admin123 cho admin, 123456 cho cac tai khoan con lai) */
-    @Bean
-    CommandLineRunner seedAccounts(UserRepository repo, PasswordEncoder encoder) {
-        return args -> {
-            seed(repo, encoder, "admin", "admin123", "Administrator", "ROLE_ADMIN");
-            seed(repo, encoder, "customer", "123456", "Khach Hang", "ROLE_CUSTOMER");
-            seed(repo, encoder, "reception", "123456", "Le Tan", "ROLE_RECEPTIONIST");
-            seed(repo, encoder, "housekeeping", "123456", "Buong Phong", "ROLE_HOUSEKEEPING");
-            seed(repo, encoder, "accountant", "123456", "Ke Toan", "ROLE_ACCOUNTANT");
-            seed(repo, encoder, "waiter", "123456", "Phuc Vu", "ROLE_WAITER");
-        };
-    }
-
-    private void seed(UserRepository repo, PasswordEncoder encoder, String username, String rawPassword,
-                      String fullName, String role) {
-        if (repo.existsByUsername(username)) return;
-        User u = new User();
-        u.setUsername(username);
-        u.setEmail(username + "@deluxe.com");
-        u.setFullName(fullName);
-        u.setPassword(encoder.encode(rawPassword));
-        u.setRole(role);
-        repo.save(u);
     }
 }
 

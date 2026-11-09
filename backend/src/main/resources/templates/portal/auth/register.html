@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <title>Deluxe Resort - Đăng Ký Tài Khoản</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/animate.css">
+    <link rel="stylesheet" href="../../css/ionicons.min.css">
+    <link rel="stylesheet" href="../../css/flaticon.css">
+    <link rel="stylesheet" href="../../css/icomoon.css">
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.65)), url('../../images/bg_1.jpg') no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Poppins', sans-serif;
+      }
+      .auth-container {
+        width: 100%;
+        max-width: 460px;
+        padding: 20px;
+      }
+      .auth-card {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+        padding: 40px 36px;
+        border: none;
+      }
+      .auth-logo {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 26px;
+        font-weight: 700;
+        color: #8d703b;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-bottom: 6px;
+        text-decoration: none;
+      }
+      .auth-logo:hover {
+        color: #73592c;
+        text-decoration: none;
+      }
+      .auth-title {
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 6px;
+      }
+      .auth-subtitle {
+        color: #777;
+        font-size: 14px;
+        margin-bottom: 26px;
+      }
+      .form-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #444;
+        margin-bottom: 6px;
+      }
+      .auth-form .form-control {
+        height: 48px !important;
+        font-size: 14px;
+        border-radius: 8px;
+        border: 1px solid #e2ded5;
+        padding-left: 16px;
+        background: #faf9f6;
+        transition: all 0.25s ease;
+      }
+      .auth-form .form-control:focus {
+        border-color: #8d703b;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(141, 112, 59, 0.15);
+      }
+      .btn-auth {
+        background: #8d703b !important;
+        border-color: #8d703b !important;
+        color: #ffffff !important;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border-radius: 8px;
+        padding: 13px 20px;
+        transition: all 0.3s ease;
+      }
+      .btn-auth:hover {
+        background: #73592c !important;
+        border-color: #73592c !important;
+        box-shadow: 0 8px 20px rgba(115, 89, 44, 0.3);
+        transform: translateY(-1px);
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="auth-container">
+      <div class="auth-card">
+
+        <!-- Tiêu đề -->
+        <div class="text-center mb-4">
+          <a href="../../index.html" class="auth-logo">DELUXE</a>
+          <h2 class="auth-title">Đăng Ký Tài Khoản</h2>
+          <p class="auth-subtitle">Trải nghiệm kỳ nghỉ dưỡng đẳng cấp cùng Deluxe</p>
+        </div>
+
+        <!-- Hộp thông báo lỗi / thành công -->
+        <div id="alert-box" class="alert d-none" role="alert" style="border-radius: 8px; font-size: 13.5px;"></div>
+
+        <!-- FORM ĐĂNG KÝ -->
+        <form id="register-form" class="auth-form">
+          <div class="form-group mb-3">
+            <label for="reg-username">Tên đăng nhập</label>
+            <input type="text" id="reg-username" class="form-control" placeholder="Tối thiểu 3 ký tự" required minlength="3" autofocus>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="reg-fullname">Họ và tên</label>
+            <input type="text" id="reg-fullname" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="reg-email">Email</label>
+            <input type="email" id="reg-email" class="form-control" placeholder="name@example.com" required>
+          </div>
+
+          <div class="form-group mb-4">
+            <label for="reg-password">Mật khẩu</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="Tối thiểu 6 ký tự" required minlength="6">
+          </div>
+
+          <div class="form-group mb-3">
+            <button type="submit" class="btn btn-auth btn-block">
+              Tạo Tài Khoản <span class="ion-ios-checkmark-circle-outline ml-1"></span>
+            </button>
+          </div>
+        </form>
+
+        <!-- ĐIỀU HƯỚNG VỀ MÀN LOGIN -->
+        <div class="text-center mt-4 pt-3 border-top">
+          <span class="text-muted small">Đã có tài khoản?</span>
+          <a href="login.html" class="font-weight-bold ml-1" style="color: #8d703b; font-size: 13.5px;">Đăng nhập ngay</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/login.js"></script>
+  </body>
+</html>

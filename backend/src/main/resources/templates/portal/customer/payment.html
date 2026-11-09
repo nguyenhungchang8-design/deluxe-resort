@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <title>Deluxe Resort - Thanh Toán Phòng &amp; Hóa Đơn</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/animate.css">
+    <link rel="stylesheet" href="../../css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../../css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../../css/magnific-popup.css">
+    <link rel="stylesheet" href="../../css/aos.css">
+    <link rel="stylesheet" href="../../css/ionicons.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../../css/jquery.timepicker.css">
+    <link rel="stylesheet" href="../../css/flaticon.css">
+    <link rel="stylesheet" href="../../css/icomoon.css">
+    <link rel="stylesheet" href="../../css/style.css">
+  </head>
+  <body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="home.html">Deluxe</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="home.html" class="nav-link">Trang chủ</a></li>
+            <li class="nav-item"><a href="rooms.html" class="nav-link">Phòng nghỉ</a></li>
+            <li class="nav-item"><a href="restaurant.html" class="nav-link">Nhà hàng</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-link">Giới thiệu</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END NAVBAR -->
+
+    <!-- HERO BANNER -->
+    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 360px;">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text d-flex align-items-center justify-content-center" style="height: 360px;">
+          <div class="col-md-9 ftco-animate text-center">
+            <div class="text">
+              <p class="breadcrumbs mb-2">
+                <span class="mr-2"><a href="home.html">Trang chủ</a></span>
+                <span>Thanh toán</span>
+              </p>
+              <h1 class="mb-2 bread" style="font-family: 'Playfair Display', Georgia, serif; font-size: 40px; color: #fff;">Thanh Toán Phòng Lưu Trú</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NỘI DUNG THANH TOÁN PHÒNG -->
+    <section class="ftco-section bg-light" id="dedicated-payment-page" style="padding: 4em 0;">
+      <div class="container">
+        <div class="row">
+
+          <!-- CỘT TRÁI: DANH SÁCH ĐẶT PHÒNG CỦA KHÁCH HÀNG -->
+          <div class="col-lg-7 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="mb-1" style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700;">Danh Sách Đặt Phòng Của Bạn</h4>
+                <p class="text-muted small mb-0">Chọn một đơn đặt phòng bên dưới để xem chi tiết hóa đơn và tiến hành thanh toán.</p>
+              </div>
+              <button type="button" id="btn-reset-demo-bookings" class="btn btn-outline-secondary btn-sm" style="border-radius: 6px; font-size: 12px;">
+                Làm mới đơn mẫu
+              </button>
+            </div>
+
+            <div id="payment-booking-list">
+              <!-- Sẽ được render tự động từ js/payment.js -->
+            </div>
+          </div>
+
+          <!-- CỘT PHẢI: KHUNG THANH TOÁN CHI TIẾT -->
+          <div class="col-lg-5">
+            <div class="bg-white p-4 rounded shadow-sm" style="border: 1px solid #ece8df;">
+              <h4 class="mb-3 pb-2 border-bottom" style="font-family: 'Playfair Display', Georgia, serif; font-weight: 700; color: #8d703b;">
+                Thông Tin Thanh Toán Phòng
+              </h4>
+
+              <div id="modal-pay-alert" class="alert d-none" role="alert"></div>
+
+              <div class="mb-3 small">
+                <div class="d-flex justify-content-between py-1">
+                  <span class="text-muted">Mã đặt phòng:</span>
+                  <strong id="modal-pay-booking-id" style="color: #8d703b;">#BK-202601</strong>
+                </div>
+                <div class="d-flex justify-content-between py-1">
+                  <span class="text-muted">Phòng lưu trú:</span>
+                  <strong id="modal-pay-room-name">Phòng Deluxe</strong>
+                </div>
+                <div class="d-flex justify-content-between py-1">
+                  <span class="text-muted">Thời gian:</span>
+                  <strong id="modal-pay-dates">15/11/2026 → 18/11/2026</strong>
+                </div>
+                <hr class="my-2">
+                <div class="d-flex justify-content-between py-1">
+                  <span class="text-muted">Tiền phòng:</span>
+                  <strong id="modal-pay-room-total">0 VNĐ</strong>
+                </div>
+                <div class="d-flex justify-content-between py-1">
+                  <span class="text-muted">Dịch vụ &amp; Nhà hàng:</span>
+                  <strong id="modal-pay-food-total">0 VNĐ</strong>
+                </div>
+                <div class="d-flex justify-content-between py-1">
+                  <span class="text-muted">Đã thanh toán / Đặt cọc:</span>
+                  <strong id="modal-pay-deposit" class="text-success">0 VNĐ</strong>
+                </div>
+                <hr class="my-2">
+                <div class="d-flex justify-content-between align-items-center py-1">
+                  <span class="font-weight-bold text-dark" style="font-size: 15px;">Cần thanh toán:</span>
+                  <strong id="modal-pay-remaining" class="text-danger" style="font-size: 20px;">0 VNĐ</strong>
+                </div>
+              </div>
+
+              <!-- CHỌN PHƯƠNG THỨC THANH TOÁN -->
+              <div class="mb-3">
+                <label class="font-weight-bold small text-uppercase text-muted mb-2 d-block">Phương thức thanh toán</label>
+
+                <div class="custom-control custom-radio mb-2">
+                  <input type="radio" id="payMethodQR" name="payMethod" class="custom-control-input" value="VIETQR" checked>
+                  <label class="custom-control-label font-weight-medium" for="payMethodQR">
+                    Chuyển khoản Ngân hàng (Mã VietQR)
+                  </label>
+                </div>
+
+                <div class="custom-control custom-radio mb-2">
+                  <input type="radio" id="payMethodCard" name="payMethod" class="custom-control-input" value="CARD">
+                  <label class="custom-control-label font-weight-medium" for="payMethodCard">
+                    Thẻ Tín dụng / Ghi nợ quốc tế (Visa, Mastercard)
+                  </label>
+                </div>
+
+                <div class="custom-control custom-radio mb-2">
+                  <input type="radio" id="payMethodWallet" name="payMethod" class="custom-control-input" value="WALLET">
+                  <label class="custom-control-label font-weight-medium" for="payMethodWallet">
+                    Ví điện tử (VNPay / MoMo)
+                  </label>
+                </div>
+              </div>
+
+              <!-- Chi tiết VietQR -->
+              <div id="pay-method-qr-box" class="p-3 mb-3 rounded text-center" style="background: #faf8f5; border: 1px dashed #8d703b;">
+                <p class="small text-muted mb-2">Quét mã QR hoặc chuyển khoản theo thông tin:</p>
+                <div class="d-inline-block p-2 bg-white rounded border mb-2">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=DELUXE-RESORT-PAYMENT" alt="VietQR" width="130" height="130">
+                </div>
+                <div class="small text-left mt-1">
+                  <div>Ngân hàng: <strong>Vietcombank (VCB)</strong></div>
+                  <div>Số tài khoản: <strong>1029 384 756</strong></div>
+                  <div>Chủ tài khoản: <strong>CONG TY CP DELUXE RESORT</strong></div>
+                  <div>Nội dung CK: <strong id="modal-qr-Memo" class="text-danger">DELUXE BK-202601</strong></div>
+                </div>
+              </div>
+
+              <!-- Chi tiết Thẻ -->
+              <div id="pay-method-card-box" class="p-3 mb-3 rounded d-none" style="background: #faf8f5; border: 1px solid #e5e0d5;">
+                <div class="form-group mb-2">
+                  <label class="small mb-1">Số thẻ</label>
+                  <input type="text" class="form-control form-control-sm" placeholder="4111 •••• •••• 1234">
+                </div>
+                <div class="form-group mb-2">
+                  <label class="small mb-1">Tên in trên thẻ</label>
+                  <input type="text" class="form-control form-control-sm" placeholder="NGUYEN VAN A">
+                </div>
+                <div class="form-row">
+                  <div class="col-6">
+                    <label class="small mb-1">Ngày hết hạn</label>
+                    <input type="text" class="form-control form-control-sm" placeholder="MM/YY">
+                  </div>
+                  <div class="col-6">
+                    <label class="small mb-1">Mã CVV</label>
+                    <input type="password" class="form-control form-control-sm" placeholder="•••">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chi tiết Ví điện tử -->
+              <div id="pay-method-wallet-box" class="p-3 mb-3 rounded text-center d-none" style="background: #faf8f5; border: 1px solid #e5e0d5;">
+                <p class="small text-muted mb-2">Mở ứng dụng <strong>VNPay</strong> hoặc <strong>MoMo</strong> để quét mã thanh toán:</p>
+                <div class="d-inline-block p-2 bg-white rounded border">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=MOMO-VNPAY-DELUXE-RESORT" alt="Wallet QR" width="120" height="120">
+                </div>
+              </div>
+
+              <button type="button" id="btn-confirm-room-payment" class="btn btn-block py-3 font-weight-bold text-uppercase" style="background: #8d703b; color: #fff; border-radius: 8px; letter-spacing: 1px;">
+                Xác Nhận Thanh Toán
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPACT FOOTER -->
+    <footer class="compact-footer">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-5 mb-3 mb-md-0">
+            <h5 class="mb-1">Deluxe Resort</h5>
+            <p class="mb-0 text-muted small">Khu nghỉ dưỡng &amp; khách sạn cao cấp tiêu chuẩn quốc tế.</p>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0 text-md-center">
+            <a href="rooms.html" class="mr-3">Phòng</a>
+            <a href="restaurant.html" class="mr-3">Nhà hàng</a>
+            <a href="about.html" class="mr-3">Giới thiệu</a>
+          </div>
+          <div class="col-md-3 text-md-right">
+            <div class="footer-social">
+              <a href="#" title="Facebook"><span class="icon-facebook"></span></a>
+              <a href="#" title="Twitter"><span class="icon-twitter"></span></a>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-12 text-center text-muted small">
+            &copy; <script>document.write(new Date().getFullYear());</script> Deluxe Resort Management System. All rights reserved. &bull; Hotline: +84 987 654 321
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- LOADER -->
+    <div id="ftco-loader" class="show fullscreen">
+      <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#8d703b"/>
+      </svg>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/jquery.easing.1.3.js"></script>
+    <script src="../../js/jquery.waypoints.min.js"></script>
+    <script src="../../js/jquery.stellar.min.js"></script>
+    <script src="../../js/owl.carousel.min.js"></script>
+    <script src="../../js/jquery.magnific-popup.min.js"></script>
+    <script src="../../js/aos.js"></script>
+    <script src="../../js/jquery.animateNumber.min.js"></script>
+    <script src="../../js/bootstrap-datepicker.js"></script>
+    <script src="../../js/jquery.timepicker.min.js"></script>
+    <script src="../../js/scrollax.min.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/payment.js"></script>
+  </body>
+</html>
