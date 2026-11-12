@@ -62,6 +62,15 @@ BEGIN
 END
 GO
 
+-- 4. Đồng bộ nhiệm vụ dọn phòng mẫu (để nhiệm vụ số 2 chưa phân công để buồng phòng tự nhận)
+IF EXISTS (SELECT 1 FROM dbo.cleaning_tasks WHERE id = 2)
+BEGIN
+    UPDATE dbo.cleaning_tasks
+    SET assigned_to = NULL
+    WHERE id = 2;
+END
+GO
+
 PRINT N'Đã cập nhật database cho Feature 4 thành công!';
 GO
 

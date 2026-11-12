@@ -99,6 +99,7 @@ CREATE TABLE dbo.rooms (
     CONSTRAINT FK_rooms_room_type FOREIGN KEY (room_type_id) REFERENCES dbo.room_types(id),
     CONSTRAINT CHK_rooms_status CHECK (status IN (
         'AVAILABLE',    -- Phòng trống
+        'READY',        -- Sẵn sàng đón khách
         'BOOKED',       -- Đã được đặt
         'OCCUPIED',     -- Đang có khách ở
         'CLEANING',     -- Đang dọn dẹp
@@ -371,8 +372,8 @@ GO
 -- 6. Công việc buồng phòng & Báo cáo bảo trì
 SET IDENTITY_INSERT dbo.cleaning_tasks ON;
 INSERT INTO dbo.cleaning_tasks (id, room_id, assigned_to, status, created_at) VALUES
-(1, 3, 4, 'IN_PROGRESS', DATEADD(hour, -2, SYSDATETIME())),
-(2, 4, 4, 'PENDING',     DATEADD(minute, -30, SYSDATETIME()));
+(1, 3, 4,    'IN_PROGRESS', DATEADD(hour, -2, SYSDATETIME())),
+(2, 4, NULL, 'PENDING',     DATEADD(minute, -30, SYSDATETIME()));
 SET IDENTITY_INSERT dbo.cleaning_tasks OFF;
 GO
 
