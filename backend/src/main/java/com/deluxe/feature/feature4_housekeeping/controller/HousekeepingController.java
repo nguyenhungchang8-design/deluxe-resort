@@ -179,14 +179,19 @@ public class HousekeepingController {
     @PutMapping("/maintenance/{id}/status")
     public ResponseEntity<?> updateMaintenanceStatus(
             @PathVariable Long id,
-            @RequestBody(required = false) Map<String, String> body) {
+            @RequestBody(required = false) Map<String, String> body,
+            Authentication auth) {
         try {
             String status = body != null ? body.get("status") : null;
             if (status == null || status.isBlank()) {
                 return ResponseEntity.badRequest()
                         .body(Map.of("message", "Vui lòng cung cấp trạng thái bảo trì hợp lệ"));
             }
-            return ResponseEntity.ok(housekeepingService.updateMaintenanceStatus(id, status));
+            String userRole = null;
+            if (auth != null) {
+                userRole = userRepository.findByUsername(auth.getName()).map(User::getRole).orElse(null);
+            }
+            return ResponseEntity.ok(housekeepingService.updateMaintenanceStatus(id, status, userRole));
         } catch (IllegalArgumentException | IllegalStateException e) {
             String msg = e.getMessage() != null ? e.getMessage() : "Không thể cập nhật trạng thái sự cố";
             return ResponseEntity.badRequest().body(Map.of("message", msg));

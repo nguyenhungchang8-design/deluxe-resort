@@ -290,7 +290,10 @@ function renderTable(rooms, highlightRoomId = null) {
     const isHousekeeping = currentUser && currentUser.role === 'ROLE_HOUSEKEEPING';
 
     if (isHousekeeping) {
-      if (item.cleaningStatus === 'PENDING') {
+      const isAssignedToOther = item.assignedTo && currentUser && item.assignedTo !== currentUser.id;
+      if (isAssignedToOther && item.cleaningStatus !== 'DONE') {
+        actionsHtml = `<span class="badge badge-light border text-muted p-2 font-weight-500">Đã giao người khác</span>`;
+      } else if (item.cleaningStatus === 'PENDING') {
         actionsHtml = `
           <button class="btn btn-sm btn-primary px-3 font-weight-bold btn-accept-task" 
                   data-task-id="${item.taskId || ''}" 
@@ -533,16 +536,12 @@ async function submitEditTask() {
 
     const activeTaskId = taskId || assignRes.taskId || assignRes.id;
 
-    // 2. Nếu có thay đổi tiến độ dọn phòng, gọi update status
-    if (activeTaskId && cleaningStatus) {
-      try {
-        await apiFetch(`/housekeeping/tasks/${activeTaskId}/status`, {
-          method: 'PUT',
-          body: JSON.stringify({ status: cleaningStatus })
-        });
-      } catch (statusErr) {
-        console.warn('Lưu ý cập nhật trạng thái:', statusErr);
-      }
+    // 2. Nếu có thay đổi tiến độ dọn phòng (khác PENDING), gọi update status và hiển thị lỗi nếu vi phạm quy tắc
+    if (activeTaskId && cleaningStatus && cleaningStatus !== 'PENDING') {
+      await apiFetch(`/housekeeping/tasks/${activeTaskId}/status`, {
+        method: 'PUT',
+        body: JSON.stringify({ status: cleaningStatus })
+      });
     }
 
     if (window.$ && $('#editTaskModal').modal) {
@@ -661,85 +660,8 @@ async function submitCreateTask() {
   }
 }
 
-// Mở modal báo sự cố phòng
-function openReportMaintenanceModal() {
-  const select = document.getElementById('modal-report-room');
-  const inputDesc = document.getElementById('modal-report-desc');
-  const selectSeverity = document.getElementById('modal-report-severity');
-
-  if (select) {
-    select.innerHTML = '<option value="">-- Chọn phòng gặp sự cố --</option>';
-    roomsList.forEach(r => {
-      const typeName = formatRoomTypeName(r.roomTypeName);
-      select.innerHTML += `<option value="${r.id}">Phòng ${escapeHtml(r.roomNumber)} - ${escapeHtml(typeName)}</option>`;
-    });
-  }
-
-  if (inputDesc) inputDesc.value = '';
-  if (selectSeverity) selectSeverity.value = 'MEDIUM';
-
-  if (window.$ && $('#reportIssueModal').modal) {
-    $('#reportIssueModal').modal('show');
-  }
-}
-
-// Gửi báo cáo sự cố phòng
-async function submitReportMaintenance() {
-  const select = document.getElementById('modal-report-room');
-  const inputDesc = document.getElementById('modal-report-desc');
-  const selectSeverity = document.getElementById('modal-report-severity');
-  const btnSave = document.getElementById('btn-save-report-issue');
-
-  const roomId = select ? select.value : null;
-  const description = inputDesc ? inputDesc.value.trim() : '';
-  const severity = selectSeverity ? selectSeverity.value : 'MEDIUM';
-
-  if (!roomId) {
-    alert('Vui lòng chọn phòng gặp sự cố.');
-    return;
-  }
-  if (!description) {
-    alert('Vui lòng nhập mô tả chi tiết hư hỏng.');
-    return;
-  }
-
-  if (btnSave) {
-    btnSave.disabled = true;
-    btnSave.textContent = 'Đang gửi...';
-  }
-
-  try {
-    const res = await apiFetch('/housekeeping/maintenance', {
-      method: 'POST',
-      body: JSON.stringify({
-        roomId: parseInt(roomId),
-        description: description,
-        severity: severity
-      })
-    });
-
-    if (window.$ && $('#reportIssueModal').modal) {
-      $('#reportIssueModal').modal('hide');
-    }
-
-    showAlert('success', `Đã gửi báo cáo sự cố phòng <strong>${res.roomNumber}</strong>. Trạng thái phòng chuyển sang bảo trì.`);
-    await loadRoomsList();
-    await loadRoomsToClean();
-  } catch (err) {
-    console.error('Lỗi gửi báo cáo sự cố:', err);
-    showAlert('danger', 'Không thể gửi báo cáo: ' + err.message);
-  } finally {
-    if (btnSave) {
-      btnSave.disabled = false;
-      btnSave.textContent = 'Gửi báo cáo';
-    }
-  }
-}
-
 function setupEventListeners() {
   document.getElementById('btn-open-create-modal')?.addEventListener('click', openCreateTaskModal);
-  document.getElementById('btn-open-report-maintenance')?.addEventListener('click', openReportMaintenanceModal);
-  document.getElementById('btn-save-report-issue')?.addEventListener('click', submitReportMaintenance);
   document.getElementById('btn-save-create-task')?.addEventListener('click', submitCreateTask);
   document.getElementById('btn-save-edit-task')?.addEventListener('click', submitEditTask);
   document.getElementById('btn-delete-task')?.addEventListener('click', submitDeleteTask);

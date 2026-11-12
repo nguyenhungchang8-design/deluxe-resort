@@ -214,8 +214,8 @@ public class HousekeepingService {
             savedTask = cleaningTaskRepository.save(newTask);
         }
 
-        // Cap nhat trang thai phong sang CLEANING (neu phong khong dang gap su co bao tri)
-        if (room.getStatus() != RoomStatus.MAINTENANCE) {
+        // Cap nhat trang thai phong sang CLEANING (chi chuyen neu phong dang trong/san sang, khong ghi de OCCUPIED/BOOKED/MAINTENANCE)
+        if (room.getStatus() == RoomStatus.AVAILABLE || room.getStatus() == RoomStatus.READY) {
             room.setStatus(RoomStatus.CLEANING);
             roomRepository.save(room);
         }
@@ -255,7 +255,7 @@ public class HousekeepingService {
                         .build();
                 task = cleaningTaskRepository.save(task);
 
-                if (room.getStatus() != RoomStatus.MAINTENANCE) {
+                if (room.getStatus() == RoomStatus.AVAILABLE || room.getStatus() == RoomStatus.READY) {
                     room.setStatus(RoomStatus.CLEANING);
                     roomRepository.save(room);
                 }
@@ -294,6 +294,9 @@ public class HousekeepingService {
                 // Neu chua co task nao duoc tao trong database cho phong nay, tao moi va cap nhat
                 Room room = roomRepository.findById(roomId)
                         .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phòng với ID: " + roomId));
+                if (newStatus == CleaningStatus.DONE) {
+                    ensureNoActiveMaintenance(room);
+                }
                 CleaningTask newTask = CleaningTask.builder()
                         .roomId(room.getId())
                         .assignedTo(currentUserId)
@@ -302,10 +305,12 @@ public class HousekeepingService {
                         .build();
                 newTask = cleaningTaskRepository.save(newTask);
                 if (newStatus == CleaningStatus.DONE) {
-                    room.setStatus(RoomStatus.READY);
-                    roomRepository.save(room);
+                    if (room.getStatus() == RoomStatus.CLEANING || room.getStatus() == RoomStatus.READY) {
+                        room.setStatus(RoomStatus.AVAILABLE);
+                        roomRepository.save(room);
+                    }
                 } else if (newStatus == CleaningStatus.IN_PROGRESS) {
-                    if (room.getStatus() != RoomStatus.CLEANING && room.getStatus() != RoomStatus.MAINTENANCE) {
+                    if (room.getStatus() == RoomStatus.AVAILABLE || room.getStatus() == RoomStatus.READY) {
                         room.setStatus(RoomStatus.CLEANING);
                         roomRepository.save(room);
                     }
@@ -318,7 +323,7 @@ public class HousekeepingService {
 
     /**
      * Cap nhat trang thai nhiem vu don phong (Update Cleaning Status)
-     * Bat buoc theo dung quy trinh: PENDING -> IN_PROGRESS -> DONE
+     * Bat buoc theo dung quy trinh: PENDING -> IN_PROGRESS -> DONE (doi voi ROLE_HOUSEKEEPING)
      * KHONG CHO PHEP DANH DAU PHONG SAN SANG (AVAILABLE) NEU PHONG VAN DANG CAN BAO TRI
      */
     public RoomToCleanDto updateTaskStatus(Long taskId, CleaningStatus newStatus, Long currentUserId, String userRole) {
@@ -346,9 +351,15 @@ public class HousekeepingService {
             throw new IllegalArgumentException("Nhiệm vụ hiện đã ở trạng thái " + currentStatus + ", không cần cập nhật lại.");
         }
 
-        // KIEM TRA QUY TRINH: PENDING -> IN_PROGRESS hoac DONE (neu hoan thanh luon)
+        // KIEM TRA QUY TRINH:
+        // - ROLE_HOUSEKEEPING bat buoc tuan tu: PENDING -> IN_PROGRESS -> DONE
+        // - Receptionist / Admin duoc phep chuyen nhanh neu can trong modal Sua
         if (currentStatus == CleaningStatus.PENDING) {
-            if (newStatus != CleaningStatus.IN_PROGRESS && newStatus != CleaningStatus.DONE) {
+            if ("ROLE_HOUSEKEEPING".equals(userRole)) {
+                if (newStatus != CleaningStatus.IN_PROGRESS) {
+                    throw new IllegalStateException("Quy trình không hợp lệ: Nhiệm vụ đang ở trạng thái 'Chờ dọn', chỉ có thể chuyển sang 'Đang dọn (IN_PROGRESS)' trước khi hoàn thành.");
+                }
+            } else if (newStatus != CleaningStatus.IN_PROGRESS && newStatus != CleaningStatus.DONE) {
                 throw new IllegalStateException("Quy trình không hợp lệ: Nhiệm vụ đang ở trạng thái 'Chờ dọn', chỉ có thể chuyển sang 'Đang dọn' hoặc 'Đã hoàn thành'.");
             }
         } else if (currentStatus == CleaningStatus.IN_PROGRESS) {
@@ -361,15 +372,9 @@ public class HousekeepingService {
 
         Room room = roomRepository.findById(task.getRoomId()).orElse(null);
 
-        // QUY TAC: KHONG CHO PHEP DANH DAU PHONG SAN SANG (READY) NEU PHONG VAN DANG CAN BAO TRI
+        // QUY TAC: KHONG CHO PHEP DANH DAU PHONG SAN SANG (AVAILABLE) NEU PHONG VAN DANG CAN BAO TRI
         if (newStatus == CleaningStatus.DONE && room != null) {
-            List<MaintenanceRequest> activeMaintenance = maintenanceRequestRepository.findByRoomId(room.getId()).stream()
-                    .filter(m -> "PENDING".equalsIgnoreCase(m.getStatus()) || "IN_PROGRESS".equalsIgnoreCase(m.getStatus()))
-                    .collect(Collectors.toList());
-
-            if (!activeMaintenance.isEmpty() || room.getStatus() == RoomStatus.MAINTENANCE) {
-                throw new IllegalStateException("Không thể đánh dấu phòng " + room.getRoomNumber() + " sẵn sàng đón khách (READY) vì phòng đang có sự cố hư hỏng cần bảo trì chưa được xử lý!");
-            }
+            ensureNoActiveMaintenance(room);
         }
 
         task.setStatus(newStatus);
@@ -377,12 +382,14 @@ public class HousekeepingService {
 
         if (room != null) {
             if (newStatus == CleaningStatus.DONE) {
-                // Khi don xong va khong co su co bao tri, cap nhat phong thanh READY
-                room.setStatus(RoomStatus.READY);
-                roomRepository.save(room);
+                // Khi don xong va khong co su co bao tri, cap nhat phong thanh AVAILABLE (giu nguyen neu OCCUPIED/BOOKED)
+                if (room.getStatus() == RoomStatus.CLEANING || room.getStatus() == RoomStatus.READY) {
+                    room.setStatus(RoomStatus.AVAILABLE);
+                    roomRepository.save(room);
+                }
             } else if (newStatus == CleaningStatus.IN_PROGRESS) {
-                // Khi Housekeeping bat dau don, cap nhat trang thai phong thanh CLEANING
-                if (room.getStatus() != RoomStatus.CLEANING && room.getStatus() != RoomStatus.MAINTENANCE) {
+                // Khi Housekeeping bat dau don, chi cap nhat sang CLEANING neu phong dang AVAILABLE/READY
+                if (room.getStatus() == RoomStatus.AVAILABLE || room.getStatus() == RoomStatus.READY) {
                     room.setStatus(RoomStatus.CLEANING);
                     roomRepository.save(room);
                 }
@@ -390,6 +397,16 @@ public class HousekeepingService {
         }
 
         return toDto(task, room);
+    }
+
+    private void ensureNoActiveMaintenance(Room room) {
+        List<MaintenanceRequest> activeMaintenance = maintenanceRequestRepository.findByRoomId(room.getId()).stream()
+                .filter(m -> "PENDING".equalsIgnoreCase(m.getStatus()) || "IN_PROGRESS".equalsIgnoreCase(m.getStatus()))
+                .collect(Collectors.toList());
+
+        if (!activeMaintenance.isEmpty() || room.getStatus() == RoomStatus.MAINTENANCE) {
+            throw new IllegalStateException("Không thể đánh dấu phòng " + room.getRoomNumber() + " sẵn sàng đón khách (AVAILABLE) vì phòng đang có sự cố hư hỏng cần bảo trì chưa được xử lý!");
+        }
     }
 
     public RoomToCleanDto updateTaskStatus(Long taskId, CleaningStatus newStatus) {
@@ -431,9 +448,11 @@ public class HousekeepingService {
 
         MaintenanceRequest saved = maintenanceRequestRepository.save(mr);
 
-        // Chuyen trang thai phong sang MAINTENANCE
-        room.setStatus(RoomStatus.MAINTENANCE);
-        roomRepository.save(room);
+        // Chuyen trang thai phong sang MAINTENANCE (giu nguyen neu phong dang co khach o OCCUPIED)
+        if (room.getStatus() != RoomStatus.OCCUPIED) {
+            room.setStatus(RoomStatus.MAINTENANCE);
+            roomRepository.save(room);
+        }
 
         return toMaintenanceDto(saved, room);
     }
@@ -496,25 +515,64 @@ public class HousekeepingService {
     }
 
     /**
-     * Cap nhat trang thai su co bao tri (vd: Receptionist danh dau da sua xong RESOLVED / CLOSED)
+     * Cap nhat trang thai su co bao tri (vd: Housekeeping nhan/hoan thanh tuan tu hoac Receptionist/Admin sua)
      */
     public MaintenanceResponseDto updateMaintenanceStatus(Long id, String newStatus) {
+        return updateMaintenanceStatus(id, newStatus, null);
+    }
+
+    public MaintenanceResponseDto updateMaintenanceStatus(Long id, String newStatus, String userRole) {
         MaintenanceRequest mr = maintenanceRequestRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy báo cáo sự cố với ID: " + id));
 
-        mr.setStatus(newStatus != null ? newStatus.toUpperCase() : "RESOLVED");
+        String normalizedStatus = newStatus != null ? newStatus.trim().toUpperCase() : "";
+        if (!List.of("PENDING", "IN_PROGRESS", "RESOLVED", "CLOSED").contains(normalizedStatus)) {
+            throw new IllegalArgumentException("Trạng thái bảo trì không hợp lệ (chỉ chấp nhận PENDING, IN_PROGRESS, RESOLVED, CLOSED).");
+        }
+
+        String currentStatus = mr.getStatus() != null ? mr.getStatus().trim().toUpperCase() : "PENDING";
+        if ("ROLE_HOUSEKEEPING".equals(userRole)) {
+            if ("PENDING".equals(currentStatus) && !"IN_PROGRESS".equals(normalizedStatus)) {
+                throw new IllegalStateException("Nhân viên buồng phòng phải bấm 'Nhận nhiệm vụ' trước khi hoàn thành xử lý sự cố.");
+            }
+            if ("IN_PROGRESS".equals(currentStatus) && !"RESOLVED".equals(normalizedStatus) && !"CLOSED".equals(normalizedStatus)) {
+                throw new IllegalStateException("Sự cố đang được khắc phục chỉ có thể chuyển sang hoàn thành.");
+            }
+            if ("RESOLVED".equals(currentStatus) || "CLOSED".equals(currentStatus)) {
+                throw new IllegalStateException("Sự cố đã hoàn thành xử lý, không thể thay đổi lại trạng thái.");
+            }
+        }
+
+        mr.setStatus(normalizedStatus);
         maintenanceRequestRepository.save(mr);
 
         Room room = roomRepository.findById(mr.getRoomId()).orElse(null);
-        if (room != null && ("RESOLVED".equalsIgnoreCase(newStatus) || "CLOSED".equalsIgnoreCase(newStatus))) {
+        if (room != null && ("RESOLVED".equals(normalizedStatus) || "CLOSED".equals(normalizedStatus))) {
             // Kiem tra xem phong con su co nao khac chua giai quyet khong
             List<MaintenanceRequest> remainingActive = maintenanceRequestRepository.findByRoomId(room.getId()).stream()
                     .filter(m -> !m.getId().equals(id) && ("PENDING".equalsIgnoreCase(m.getStatus()) || "IN_PROGRESS".equalsIgnoreCase(m.getStatus())))
                     .collect(Collectors.toList());
 
             if (remainingActive.isEmpty() && room.getStatus() == RoomStatus.MAINTENANCE) {
-                // Neu het su co, tra ve trang thai CLEANING de don phong truoc khi don khach
+                // Neu het su co, tra ve trang thai CLEANING va tu dong tao nhiem vu don phong PENDING neu chua co
                 room.setStatus(RoomStatus.CLEANING);
+                roomRepository.save(room);
+
+                boolean hasActiveTask = cleaningTaskRepository.findByRoomId(room.getId()).stream()
+                        .anyMatch(t -> t.getStatus() == CleaningStatus.PENDING || t.getStatus() == CleaningStatus.IN_PROGRESS);
+                if (!hasActiveTask) {
+                    CleaningTask postMaintenanceTask = CleaningTask.builder()
+                            .roomId(room.getId())
+                            .assignedTo(null)
+                            .status(CleaningStatus.PENDING)
+                            .createdAt(LocalDateTime.now())
+                            .build();
+                    cleaningTaskRepository.save(postMaintenanceTask);
+                }
+            }
+        } else if (room != null && ("PENDING".equals(normalizedStatus) || "IN_PROGRESS".equals(normalizedStatus))) {
+            if (room.getStatus() != RoomStatus.OCCUPIED && room.getStatus() != RoomStatus.MAINTENANCE) {
+                room.setStatus(RoomStatus.MAINTENANCE);
                 roomRepository.save(room);
             }
         }
