@@ -519,32 +519,56 @@ function attachActionHandlers() {
 
   // Gắn sự kiện cho nút Hoàn thành dọn phòng (Buồng phòng)
   document.querySelectorAll('.btn-complete-task').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
+    btn.addEventListener('click', (e) => {
       const { taskId, roomId, roomNumber } = e.currentTarget.dataset;
-      if (!(await deluxeConfirm(`Xác nhận phòng ${roomNumber} đã được dọn sạch sẽ và sẵn sàng đón khách?`))) {
-        return;
-      }
-
-      const originalText = e.currentTarget.innerHTML;
-      e.currentTarget.disabled = true;
-      e.currentTarget.textContent = 'Đang hoàn thành...';
-
-      try {
-        const idToUse = taskId || 0;
-        await apiFetch(`/housekeeping/tasks/${idToUse}/status?roomId=${roomId || ''}`, {
-          method: 'PUT',
-          body: JSON.stringify({ status: 'DONE' })
-        });
-        showAlert('success', `Đã hoàn thành dọn phòng <strong>${roomNumber}</strong>. Trạng thái phòng chuyển sang Sẵn sàng.`);
-        await loadRoomsToClean();
-      } catch (err) {
-        console.error('Lỗi hoàn thành nhiệm vụ:', err);
-        showAlert('danger', 'Không thể hoàn thành nhiệm vụ: ' + err.message);
-        e.currentTarget.disabled = false;
-        e.currentTarget.innerHTML = originalText;
+      pendingCompleteData = { taskId, roomId, roomNumber, btn: e.currentTarget };
+      const roomEl = document.getElementById('confirm-room-number');
+      if (roomEl) roomEl.textContent = roomNumber || '--';
+      if (window.$ && $('#confirmCompleteModal').modal) {
+        $('#confirmCompleteModal').modal('show');
+      } else {
+        submitCompleteCleaning();
       }
     });
   });
+
+  const btnConfirmOk = document.getElementById('btn-confirm-complete-ok');
+  if (btnConfirmOk) {
+    btnConfirmOk.onclick = submitCompleteCleaning;
+  }
+}
+
+let pendingCompleteData = null;
+
+async function submitCompleteCleaning() {
+  if (!pendingCompleteData) return;
+  const { taskId, roomId, roomNumber, btn } = pendingCompleteData;
+  if (window.$ && $('#confirmCompleteModal').modal) {
+    $('#confirmCompleteModal').modal('hide');
+  }
+
+  const originalText = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Đang hoàn thành...';
+  }
+
+  try {
+    const idToUse = taskId || 0;
+    await apiFetch(`/housekeeping/tasks/${idToUse}/status?roomId=${roomId || ''}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status: 'DONE' })
+    });
+    showAlert('success', `Đã hoàn thành dọn phòng <strong>${roomNumber}</strong>. Trạng thái phòng chuyển sang Sẵn sàng.`);
+    await loadRoomsToClean();
+  } catch (err) {
+    console.error('Lỗi hoàn thành nhiệm vụ:', err);
+    showAlert('danger', 'Không thể hoàn thành nhiệm vụ: ' + err.message);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  }
 }
 
 // Mở modal Sửa phân công

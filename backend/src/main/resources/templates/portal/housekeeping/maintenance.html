@@ -286,13 +286,34 @@
       </div>
     </div>
 
+    <!-- Modal xác nhận hoàn thành bảo trì sự cố (Deluxe) -->
+    <div class="modal fade" id="confirmMaintenanceModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow border-0">
+          <div class="modal-header bg-dark text-white py-3">
+            <h5 class="modal-title font-weight-bold text-white mb-0">Deluxe</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Đóng">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4 text-dark" style="font-size: 15px;">
+            Xác nhận sự cố phòng <strong id="confirm-maint-room-number">--</strong> đã được sửa chữa khắc phục xong?
+          </div>
+          <div class="modal-footer bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-sm px-3" data-dismiss="modal">Hủy</button>
+            <button type="button" class="btn btn-primary btn-sm font-weight-bold px-3" id="btn-confirm-maint-ok">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Scripts -->
     <script src="../../js/jquery.min.js"></script>
     <script src="../../js/popper.min.js"></script>
     <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
-    <script src="../../js/staff-common.js?v=20261113_2"></script>
-    <script src="../../js/maintenance.js"></script>
+    <script src="../../js/staff-common.js?v=20261113_3"></script>
+    <script src="../../js/maintenance.js?v=20261113_3"></script>
   </body>
 </html>

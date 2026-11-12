@@ -353,32 +353,56 @@ function renderTable(list) {
 
   // Buồng phòng: Hoàn thành xử lý sự cố bảo trì
   document.querySelectorAll('.btn-complete-maint').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
+    btn.addEventListener('click', (e) => {
       const { id, roomNumber } = e.currentTarget.dataset;
-      if (!(await deluxeConfirm(`Xác nhận sự cố phòng ${roomNumber} đã được sửa chữa khắc phục xong?`))) {
-        return;
-      }
-
-      const originalText = e.currentTarget.innerHTML;
-      e.currentTarget.disabled = true;
-      e.currentTarget.textContent = 'Đang hoàn thành...';
-
-      try {
-        await apiFetch(`/housekeeping/maintenance/${id}/status`, {
-          method: 'PUT',
-          body: JSON.stringify({ status: 'RESOLVED' })
-        });
-        showAlert('success', `Đã hoàn thành sửa chữa phòng <strong>${roomNumber}</strong>. Phòng đã được gỡ trạng thái bảo trì.`);
-        await loadMaintenanceRequests();
-        await loadRooms();
-      } catch (err) {
-        console.error('Lỗi hoàn thành bảo trì:', err);
-        showAlert('danger', 'Không thể hoàn tất bảo trì: ' + err.message);
-        e.currentTarget.disabled = false;
-        e.currentTarget.innerHTML = originalText;
+      pendingMaintData = { id, roomNumber, btn: e.currentTarget };
+      const roomEl = document.getElementById('confirm-maint-room-number');
+      if (roomEl) roomEl.textContent = roomNumber || '--';
+      if (window.$ && $('#confirmMaintenanceModal').modal) {
+        $('#confirmMaintenanceModal').modal('show');
+      } else {
+        submitCompleteMaintenance();
       }
     });
   });
+
+  const btnConfirmMaintOk = document.getElementById('btn-confirm-maint-ok');
+  if (btnConfirmMaintOk) {
+    btnConfirmMaintOk.onclick = submitCompleteMaintenance;
+  }
+}
+
+let pendingMaintData = null;
+
+async function submitCompleteMaintenance() {
+  if (!pendingMaintData) return;
+  const { id, roomNumber, btn } = pendingMaintData;
+  if (window.$ && $('#confirmMaintenanceModal').modal) {
+    $('#confirmMaintenanceModal').modal('hide');
+  }
+
+  const originalText = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Đang hoàn thành...';
+  }
+
+  try {
+    await apiFetch(`/housekeeping/maintenance/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status: 'RESOLVED' })
+    });
+    showAlert('success', `Đã hoàn thành sửa chữa phòng <strong>${roomNumber}</strong>. Phòng đã được gỡ trạng thái bảo trì.`);
+    await loadMaintenanceRequests();
+    await loadRooms();
+  } catch (err) {
+    console.error('Lỗi hoàn thành bảo trì:', err);
+    showAlert('danger', 'Không thể hoàn tất bảo trì: ' + err.message);
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  }
 }
 
 function openEditMaintenanceModal(id, roomNumber, currentStatus) {
