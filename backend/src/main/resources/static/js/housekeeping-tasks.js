@@ -458,7 +458,7 @@ function attachActionHandlers() {
   document.querySelectorAll('.btn-complete-task').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       const { taskId, roomId, roomNumber } = e.currentTarget.dataset;
-      if (!confirm(`Xác nhận phòng ${roomNumber} đã được dọn sạch sẽ và sẵn sàng đón khách?`)) {
+      if (!(await deluxeConfirm(`Xác nhận phòng ${roomNumber} đã được dọn sạch sẽ và sẵn sàng đón khách?`))) {
         return;
       }
 
@@ -568,7 +568,7 @@ async function submitDeleteTask() {
   const roomId = document.getElementById('modal-edit-room-id')?.value;
   const roomNumber = document.getElementById('modal-edit-room-number')?.textContent || '';
 
-  if (!confirm(`Bạn có chắc chắn muốn xóa nhiệm vụ dọn phòng cho phòng ${roomNumber}? Phòng sẽ được chuyển về trạng thái sẵn sàng nếu không còn nhiệm vụ nào khác.`)) {
+  if (!(await deluxeConfirm(`Bạn có chắc chắn muốn xóa nhiệm vụ dọn phòng cho phòng ${roomNumber}? Phòng sẽ được chuyển về trạng thái sẵn sàng nếu không còn nhiệm vụ nào khác.`))) {
     return;
   }
 
@@ -622,7 +622,7 @@ async function submitCreateTask() {
   const btnSave = document.getElementById('btn-save-create-task');
 
   if (!roomId) {
-    alert('Vui lòng chọn phòng cần dọn dẹp.');
+    await deluxeAlert('Vui lòng chọn phòng cần dọn dẹp.');
     return;
   }
 

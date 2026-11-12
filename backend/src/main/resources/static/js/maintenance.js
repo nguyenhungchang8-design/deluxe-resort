@@ -282,7 +282,7 @@ function renderTable(list) {
   document.querySelectorAll('.btn-complete-maint').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       const { id, roomNumber } = e.currentTarget.dataset;
-      if (!confirm(`Xác nhận sự cố phòng ${roomNumber} đã được sửa chữa khắc phục xong?`)) {
+      if (!(await deluxeConfirm(`Xác nhận sự cố phòng ${roomNumber} đã được sửa chữa khắc phục xong?`))) {
         return;
       }
 
@@ -396,7 +396,7 @@ async function deleteMaintenanceRequest() {
   const roomNumber = document.getElementById('modal-maint-room-number')?.textContent || '';
   if (!id) return;
 
-  if (!confirm(`Bạn có chắc chắn muốn xóa sự cố bảo trì của phòng ${roomNumber}? Nếu không còn sự cố nào khác, phòng sẽ tự động thoát trạng thái bảo trì.`)) {
+  if (!(await deluxeConfirm(`Bạn có chắc chắn muốn xóa sự cố bảo trì của phòng ${roomNumber}? Nếu không còn sự cố nào khác, phòng sẽ tự động thoát trạng thái bảo trì.`))) {
     return;
   }
 
@@ -463,11 +463,11 @@ async function submitReportMaintenance() {
   const severity = selectSeverity ? selectSeverity.value : 'MEDIUM';
 
   if (!roomId) {
-    alert('Vui lòng chọn phòng gặp sự cố.');
+    await deluxeAlert('Vui lòng chọn phòng gặp sự cố.');
     return;
   }
   if (!description) {
-    alert('Vui lòng nhập mô tả chi tiết hư hỏng.');
+    await deluxeAlert('Vui lòng nhập mô tả chi tiết hư hỏng.');
     return;
   }
 
