@@ -4,8 +4,11 @@ let currentUser = null;
 let staffList = [];
 let roomsList = [];
 let allRoomsData = [];
+let filteredRoomsData = [];
 let isMyTasksOnly = false;
 let editingOriginalStatus = null;
+const PAGE_SIZE = 5;
+let currentPage = 1;
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
@@ -150,20 +153,21 @@ async function loadRoomsToClean(highlightRoomId = null) {
   const tbody = document.getElementById('rooms-tbody');
   const loading = document.getElementById('loading-indicator');
   const emptyState = document.getElementById('empty-state');
+  const paginationContainer = document.getElementById('pagination-container');
 
   if (loading) loading.style.display = 'block';
   if (emptyState) emptyState.style.display = 'none';
+  if (paginationContainer) paginationContainer.style.display = 'none';
   if (tbody) tbody.innerHTML = '';
 
   const searchRoom = (document.getElementById('search-room')?.value || '').trim().toLowerCase();
   const filterStatus = document.getElementById('filter-status')?.value || 'ALL_ACTIVE';
-  const filterRoomStatus = document.getElementById('filter-room-status')?.value || '';
+  const filterDate = document.getElementById('filter-date')?.value || '';
 
   try {
     const data = await apiFetch('/housekeeping/tasks?status=ALL');
     allRoomsData = data;
 
-    updateKpiCounters(data);
     updateMyTasksBadge(data);
 
     let displayedData = data;
@@ -182,35 +186,45 @@ async function loadRoomsToClean(highlightRoomId = null) {
 
     // Lọc theo mã phòng
     if (searchRoom) {
-      displayedData = displayedData.filter(item => 
+      displayedData = displayedData.filter(item =>
         (item.roomNumber && String(item.roomNumber).toLowerCase().includes(searchRoom))
       );
     }
 
-    // Lọc theo trạng thái phòng
-    if (filterRoomStatus) {
-      displayedData = displayedData.filter(item => {
-        if (filterRoomStatus === 'READY' || filterRoomStatus === 'AVAILABLE') {
-          return item.roomStatus === 'READY' || item.roomStatus === 'AVAILABLE' || item.cleaningStatus === 'DONE';
-        }
-        if (filterRoomStatus === 'CLEANING') {
-          return item.roomStatus === 'CLEANING' || item.cleaningStatus === 'IN_PROGRESS';
-        }
-        if (filterRoomStatus === 'PENDING') {
-          return item.cleaningStatus === 'PENDING';
-        }
-        return item.roomStatus === filterRoomStatus;
-      });
+    // Lọc theo ngày (YYYY-MM-DD)
+    if (filterDate) {
+      displayedData = displayedData.filter(item => toLocalDateString(item.createdAt) === filterDate);
     }
+
+    // Sắp xếp theo thời gian giao mới nhất lên trước
+    displayedData.sort((a, b) => {
+      const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      if (tb !== ta) return tb - ta;
+      return String(a.roomNumber || '').localeCompare(String(b.roomNumber || ''));
+    });
+
+    filteredRoomsData = displayedData;
 
     if (loading) loading.style.display = 'none';
 
-    if (!displayedData || displayedData.length === 0) {
+    if (!filteredRoomsData || filteredRoomsData.length === 0) {
       if (emptyState) emptyState.style.display = 'block';
       return;
     }
 
-    renderTable(displayedData, highlightRoomId);
+    if (highlightRoomId) {
+      const idx = filteredRoomsData.findIndex(r => r.roomId === highlightRoomId);
+      if (idx >= 0) {
+        currentPage = Math.floor(idx / PAGE_SIZE) + 1;
+      }
+    }
+
+    const totalPages = Math.max(1, Math.ceil(filteredRoomsData.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    renderCurrentPage(highlightRoomId);
   } catch (err) {
     if (loading) loading.style.display = 'none';
     console.error('Lỗi tải danh sách phòng:', err);
@@ -218,22 +232,71 @@ async function loadRoomsToClean(highlightRoomId = null) {
   }
 }
 
-// Cập nhật 4 thẻ thống kê phòng
-function updateKpiCounters(data) {
-  const pendingCount = data.filter(r => r.cleaningStatus === 'PENDING').length;
-  const inProgressCount = data.filter(r => r.cleaningStatus === 'IN_PROGRESS').length;
-  const doneCount = data.filter(r => r.cleaningStatus === 'DONE').length;
-  const totalNeedClean = pendingCount + inProgressCount;
+function toLocalDateString(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return '';
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
 
-  const elTotal = document.getElementById('kpi-total');
-  const elPending = document.getElementById('kpi-pending');
-  const elInProgress = document.getElementById('kpi-inprogress');
-  const elDone = document.getElementById('kpi-done');
+function renderCurrentPage(highlightRoomId = null) {
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filteredRoomsData.slice(start, start + PAGE_SIZE);
+  renderTable(pageItems, highlightRoomId);
+  renderPagination();
+}
 
-  if (elTotal) elTotal.textContent = totalNeedClean;
-  if (elPending) elPending.textContent = pendingCount;
-  if (elInProgress) elInProgress.textContent = inProgressCount;
-  if (elDone) elDone.textContent = doneCount;
+function renderPagination() {
+  const container = document.getElementById('pagination-container');
+  const infoEl = document.getElementById('pagination-info');
+  const controlsEl = document.getElementById('pagination-controls');
+  if (!container || !infoEl || !controlsEl) return;
+
+  const total = filteredRoomsData.length;
+  if (total === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const startItem = (currentPage - 1) * PAGE_SIZE + 1;
+  const endItem = Math.min(currentPage * PAGE_SIZE, total);
+
+  container.style.display = 'flex';
+  infoEl.textContent = `Hiển thị ${startItem}-${endItem} trên tổng số ${total} phòng`;
+
+  let html = `
+    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+      <a class="page-link" href="#" data-page="${currentPage - 1}">Trước</a>
+    </li>
+  `;
+
+  for (let p = 1; p <= totalPages; p++) {
+    html += `
+      <li class="page-item ${p === currentPage ? 'active' : ''}">
+        <a class="page-link" href="#" data-page="${p}">${p}</a>
+      </li>
+    `;
+  }
+
+  html += `
+    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+      <a class="page-link" href="#" data-page="${currentPage + 1}">Sau</a>
+    </li>
+  `;
+
+  controlsEl.innerHTML = html;
+  controlsEl.querySelectorAll('a.page-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetPage = parseInt(e.currentTarget.dataset.page);
+      if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages && targetPage !== currentPage) {
+        currentPage = targetPage;
+        renderCurrentPage();
+      }
+    });
+  });
 }
 
 // Cập nhật số lượng nhiệm vụ của tôi trên huy hiệu (badge)
@@ -669,6 +732,7 @@ function setupEventListeners() {
 
   btnViewAll?.addEventListener('click', async () => {
     isMyTasksOnly = false;
+    currentPage = 1;
     btnViewAll.classList.add('btn-primary', 'active');
     btnViewAll.classList.remove('btn-outline-primary');
     btnViewMyTasks?.classList.remove('btn-primary', 'active');
@@ -678,6 +742,7 @@ function setupEventListeners() {
 
   btnViewMyTasks?.addEventListener('click', async () => {
     isMyTasksOnly = true;
+    currentPage = 1;
     btnViewMyTasks.classList.add('btn-primary', 'active');
     btnViewMyTasks.classList.remove('btn-outline-primary');
     btnViewAll?.classList.remove('btn-primary', 'active');
@@ -690,38 +755,28 @@ function setupEventListeners() {
     let debounceTimer;
     searchInput.addEventListener('input', () => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => loadRoomsToClean(), 250);
+      debounceTimer = setTimeout(() => {
+        currentPage = 1;
+        loadRoomsToClean();
+      }, 250);
     });
   }
 
-  document.getElementById('filter-status')?.addEventListener('change', () => loadRoomsToClean());
-  document.getElementById('filter-room-status')?.addEventListener('change', () => loadRoomsToClean());
+  document.getElementById('filter-status')?.addEventListener('change', () => {
+    currentPage = 1;
+    loadRoomsToClean();
+  });
+  document.getElementById('filter-date')?.addEventListener('change', () => {
+    currentPage = 1;
+    loadRoomsToClean();
+  });
+  document.getElementById('btn-clear-date')?.addEventListener('click', () => {
+    const dateInput = document.getElementById('filter-date');
+    if (dateInput) dateInput.value = '';
+    currentPage = 1;
+    loadRoomsToClean();
+  });
   document.getElementById('btn-refresh')?.addEventListener('click', () => loadRoomsToClean());
-
-  // Thẻ thống kê nhấp để lọc nhanh
-  const statusSelect = document.getElementById('filter-status');
-  const roomStatusSelect = document.getElementById('filter-room-status');
-
-  document.getElementById('card-kpi-total')?.addEventListener('click', () => {
-    if (statusSelect) statusSelect.value = 'ALL_ACTIVE';
-    if (roomStatusSelect) roomStatusSelect.value = '';
-    loadRoomsToClean();
-  });
-  document.getElementById('card-kpi-pending')?.addEventListener('click', () => {
-    if (statusSelect) statusSelect.value = 'PENDING';
-    if (roomStatusSelect) roomStatusSelect.value = '';
-    loadRoomsToClean();
-  });
-  document.getElementById('card-kpi-inprogress')?.addEventListener('click', () => {
-    if (statusSelect) statusSelect.value = 'IN_PROGRESS';
-    if (roomStatusSelect) roomStatusSelect.value = '';
-    loadRoomsToClean();
-  });
-  document.getElementById('card-kpi-done')?.addEventListener('click', () => {
-    if (statusSelect) statusSelect.value = 'DONE';
-    if (roomStatusSelect) roomStatusSelect.value = '';
-    loadRoomsToClean();
-  });
 }
 
 function showAlert(type, htmlMessage) {

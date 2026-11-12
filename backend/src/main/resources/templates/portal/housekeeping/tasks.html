@@ -112,34 +112,6 @@
           </div>
         </div>
 
-        <!-- 4 KPI Stat Cards (100% Tiếng Việt) -->
-        <div class="row mb-4">
-          <div class="col-md-3 col-sm-6 mb-3">
-            <div class="bg-white p-4 text-center rounded shadow-sm kpi-card" id="card-kpi-total">
-              <h2 class="mb-1 text-danger font-weight-bold" id="kpi-total" style="font-family:'Playfair Display',serif">0</h2>
-              <p class="mb-0 text-muted small font-weight-bold uppercase">Tổng phòng cần dọn</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6 mb-3">
-            <div class="bg-white p-4 text-center rounded shadow-sm kpi-card" id="card-kpi-pending">
-              <h2 class="mb-1 text-warning font-weight-bold" id="kpi-pending" style="font-family:'Playfair Display',serif">0</h2>
-              <p class="mb-0 text-muted small font-weight-bold uppercase">Chờ dọn</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6 mb-3">
-            <div class="bg-white p-4 text-center rounded shadow-sm kpi-card" id="card-kpi-inprogress">
-              <h2 class="mb-1 text-primary font-weight-bold" id="kpi-inprogress" style="font-family:'Playfair Display',serif">0</h2>
-              <p class="mb-0 text-muted small font-weight-bold uppercase">Đang dọn</p>
-            </div>
-          </div>
-          <div class="col-md-3 col-sm-6 mb-3">
-            <div class="bg-white p-4 text-center rounded shadow-sm kpi-card" id="card-kpi-done">
-              <h2 class="mb-1 text-success font-weight-bold" id="kpi-done" style="font-family:'Playfair Display',serif">0</h2>
-              <p class="mb-0 text-muted small font-weight-bold uppercase">Dọn xong</p>
-            </div>
-          </div>
-        </div>
-
         <!-- Filter & Search Card (100% Tiếng Việt) -->
         <div class="card mb-4 border-0 shadow-sm">
           <div class="card-body p-3">
@@ -167,18 +139,15 @@
                 </select>
               </div>
 
-              <!-- Lọc theo trạng thái phòng -->
+              <!-- Lọc theo ngày -->
               <div class="col-md-4 col-sm-6 mb-2 mb-md-0">
-                <label class="small font-weight-bold text-muted mb-1">Lọc theo trạng thái phòng:</label>
-                <select class="form-control" id="filter-room-status">
-                  <option value="">Tất cả trạng thái phòng</option>
-                  <option value="CLEANING">Đang dọn phòng</option>
-                  <option value="READY">Sẵn sàng đón khách</option>
-                  <option value="AVAILABLE">Phòng trống</option>
-                  <option value="OCCUPIED">Đang có khách</option>
-                  <option value="BOOKED">Đã đặt trước</option>
-                  <option value="MAINTENANCE">Đang bảo trì</option>
-                </select>
+                <label class="small font-weight-bold text-muted mb-1" for="filter-date">Lọc theo ngày:</label>
+                <div class="input-group">
+                  <input type="date" class="form-control" id="filter-date">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="btn-clear-date" title="Xóa lọc ngày">&times;</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -220,6 +189,14 @@
                 <!-- Nạp động qua JavaScript -->
               </tbody>
             </table>
+          </div>
+
+          <!-- Phân trang (5 giá trị / trang) -->
+          <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top flex-wrap" id="pagination-container" style="display:none;">
+            <small class="text-muted mb-2 mb-sm-0" id="pagination-info"></small>
+            <nav aria-label="Phân trang danh sách dọn phòng">
+              <ul class="pagination pagination-sm mb-0" id="pagination-controls"></ul>
+            </nav>
           </div>
         </div>
 
