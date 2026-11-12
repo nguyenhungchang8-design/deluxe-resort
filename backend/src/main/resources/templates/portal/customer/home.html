@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Deluxe - Free Bootstrap 4 Template by Colorlib</title>
@@ -41,10 +41,9 @@
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item active"><a href="home.html" class="nav-link">Trang chủ</a></li>
 	          <li class="nav-item"><a href="rooms.html" class="nav-link">Phòng nghỉ</a></li>
+	          <li class="nav-item"><a href="bookings.html" class="nav-link">Đặt phòng của tôi</a></li>
 	          <li class="nav-item"><a href="restaurant.html" class="nav-link">Nhà hàng</a></li>
 	          <li class="nav-item"><a href="about.html" class="nav-link">Giới thiệu</a></li>
-	          
-	          
 	        </ul>
 	      </div>
 	    </div>
@@ -85,38 +84,33 @@
     	<div class="container">
     		<div class="row">
     			<div class="col-lg-12">
-    				<form action="#" class="booking-form">
+    				<form action="rooms.html" id="home-booking-search-form" class="booking-form">
 	        		<div class="row">
 	        			<div class="col-md-3 d-flex">
 	        				<div class="form-group p-4 align-self-stretch d-flex align-items-end">
 	        					<div class="wrap">
-				    					<label for="#">Check-in Date</label>
-				    					<input type="text" class="form-control checkin_date" placeholder="Ngày nhận phòng">
+				    					<label for="home-checkin">Check-in Date</label>
+				    					<input type="text" id="home-checkin" class="form-control checkin_date" placeholder="Ngày nhận phòng" autocomplete="off">
 			    					</div>
 			    				</div>
 	        			</div>
 	        			<div class="col-md-3 d-flex">
 	        				<div class="form-group p-4 align-self-stretch d-flex align-items-end">
 	        					<div class="wrap">
-				    					<label for="#">Check-out Date</label>
-				    					<input type="text" class="form-control checkout_date" placeholder="Ngày trả phòng">
+				    					<label for="home-checkout">Check-out Date</label>
+				    					<input type="text" id="home-checkout" class="form-control checkout_date" placeholder="Ngày trả phòng" autocomplete="off">
 			    				</div>
 			    				</div>
 	        			</div>
 	        			<div class="col-md d-flex">
 	        				<div class="form-group p-4 align-self-stretch d-flex align-items-end">
 	        					<div class="wrap">
-			      					<label for="#">Room</label>
+			      					<label for="home-room-type-select">Hạng phòng</label>
 			      					<div class="form-field">
 			        					<div class="select-wrap">
 			                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-			                    <select name="" id="" class="form-control">
-			                    	<option value="">Suite</option>
-			                      <option value="">Phòng Family</option>
-			                      <option value="">Phòng Deluxe</option>
-			                      <option value="">Phòng Tiêu chuẩn</option>
-			                      <option value="">Phòng Cao cấp</option>
-			                      <option value="">Phòng Sang trọng</option>
+			                    <select name="roomTypeId" id="home-room-type-select" class="form-control">
+			                    	<option value="">Tất cả hạng phòng</option>
 			                    </select>
 			                  </div>
 				              </div>
@@ -126,17 +120,18 @@
 	        			<div class="col-md d-flex">
 	        				<div class="form-group p-4 align-self-stretch d-flex align-items-end">
 	        					<div class="wrap">
-			      					<label for="#">Customer</label>
+			      					<label for="home-capacity-select">Số khách tối thiểu</label>
 			      					<div class="form-field">
 			        					<div class="select-wrap">
 			                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-			                    <select name="" id="" class="form-control">
-			                    	<option value="">1 Adult</option>
-			                      <option value="">2 Adult</option>
-			                      <option value="">3 Adult</option>
-			                      <option value="">4 Adult</option>
-			                      <option value="">5 Adult</option>
-			                      <option value="">6 Adult</option>
+			                    <select name="capacity" id="home-capacity-select" class="form-control">
+			                    	<option value="">Bất kỳ</option>
+			                    	<option value="1">1 khách</option>
+			                      <option value="2">2 khách</option>
+			                      <option value="3">3 khách</option>
+			                      <option value="4">4 khách</option>
+			                      <option value="5">5 khách</option>
+			                      <option value="6">6 khách</option>
 			                    </select>
 			                  </div>
 				              </div>
@@ -278,97 +273,8 @@
             <h2 class="mb-4">Hệ thống phòng nghỉ</h2>
           </div>
         </div>    		
-    		<div class="row">
-    			<div class="col-sm col-md-6 col-lg-4 ftco-animate">
-    				<div class="room">
-    					<a href="rooms.html" class="img d-flex justify-content-center align-items-center" style="background-image: url(../../images/room-1.jpg);">
-    						<div class="icon d-flex justify-content-center align-items-center">
-    							<span class="icon-search2"></span>
-    						</div>
-    					</a>
-    					<div class="text p-3 text-center">
-    						<h3 class="mb-3"><a href="rooms.html">Phòng Suite</a></h3>
-    						<p><span class="price mr-2">2.800.000 VNĐ</span> <span class="per">/ đêm</span></p>
-    						<hr>
-    						<p class="pt-1"><a href="rooms-single.html" class="btn-custom">Chi tiết phòng <span class="icon-long-arrow-right"></span></a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm col-md-6 col-lg-4 ftco-animate">
-    				<div class="room">
-    					<a href="rooms.html" class="img d-flex justify-content-center align-items-center" style="background-image: url(../../images/room-2.jpg);">
-    						<div class="icon d-flex justify-content-center align-items-center">
-    							<span class="icon-search2"></span>
-    						</div>
-    					</a>
-    					<div class="text p-3 text-center">
-    						<h3 class="mb-3"><a href="rooms.html">Phòng Family</a></h3>
-    						<p><span class="price mr-2">1.200.000 VNĐ</span> <span class="per">/ đêm</span></p>
-    						<hr>
-    						<p class="pt-1"><a href="rooms-single.html" class="btn-custom">Chi tiết phòng <span class="icon-long-arrow-right"></span></a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm col-md-6 col-lg-4 ftco-animate">
-    				<div class="room">
-    					<a href="rooms.html" class="img d-flex justify-content-center align-items-center" style="background-image: url(../../images/room-3.jpg);">
-    						<div class="icon d-flex justify-content-center align-items-center">
-    							<span class="icon-search2"></span>
-    						</div>
-    					</a>
-    					<div class="text p-3 text-center">
-    						<h3 class="mb-3"><a href="rooms.html">Phòng Deluxe</a></h3>
-    						<p><span class="price mr-2">1.500.000 VNĐ</span> <span class="per">/ đêm</span></p>
-    						<hr>
-    						<p class="pt-1"><a href="rooms-single.html" class="btn-custom">Chi tiết phòng <span class="icon-long-arrow-right"></span></a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm col-md-6 col-lg-4 ftco-animate">
-    				<div class="room">
-    					<a href="rooms.html" class="img d-flex justify-content-center align-items-center" style="background-image: url(../../images/room-4.jpg);">
-    						<div class="icon d-flex justify-content-center align-items-center">
-    							<span class="icon-search2"></span>
-    						</div>
-    					</a>
-    					<div class="text p-3 text-center">
-    						<h3 class="mb-3"><a href="rooms.html">Phòng Tiêu chuẩn</a></h3>
-    						<p><span class="price mr-2">900.000 VNĐ</span> <span class="per">/ đêm</span></p>
-    						<hr>
-    						<p class="pt-1"><a href="rooms-single.html" class="btn-custom">Chi tiết phòng <span class="icon-long-arrow-right"></span></a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm col-md-6 col-lg-4 ftco-animate">
-    				<div class="room">
-    					<a href="rooms.html" class="img d-flex justify-content-center align-items-center" style="background-image: url(../../images/room-5.jpg);">
-    						<div class="icon d-flex justify-content-center align-items-center">
-    							<span class="icon-search2"></span>
-    						</div>
-    					</a>
-    					<div class="text p-3 text-center">
-    						<h3 class="mb-3"><a href="rooms.html">Phòng Cao cấp</a></h3>
-    						<p><span class="price mr-2">2.800.000 VNĐ</span> <span class="per">/ đêm</span></p>
-    						<hr>
-    						<p class="pt-1"><a href="rooms-single.html" class="btn-custom">Chi tiết phòng <span class="icon-long-arrow-right"></span></a></p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm col-md-6 col-lg-4 ftco-animate">
-    				<div class="room">
-    					<a href="rooms.html" class="img d-flex justify-content-center align-items-center" style="background-image: url(../../images/room-6.jpg);">
-    						<div class="icon d-flex justify-content-center align-items-center">
-    							<span class="icon-search2"></span>
-    						</div>
-    					</a>
-    					<div class="text p-3 text-center">
-    						<h3 class="mb-3"><a href="rooms.html">Phòng Sang trọng</a></h3>
-    						<p><span class="price mr-2">3.500.000 VNĐ</span> <span class="per">/ đêm</span></p>
-    						<hr>
-    						<p class="pt-1"><a href="rooms-single.html" class="btn-custom">Chi tiết phòng <span class="icon-long-arrow-right"></span></a></p>
-    					</div>
-    				</div>
-    			</div>
+    		<div class="row" id="customer-home-rooms-grid">
+    			<div class="col-12 text-center py-4 text-muted">Đang tải danh sách hạng phòng...</div>
     		</div>
     	</div>
     </section>
@@ -558,9 +464,9 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="../../js/google-map.js"></script>
   <script src="../../js/main.js"></script>
-    
-    <script src="../../js/api.js"></script>
+  <script src="../../js/api.js"></script>
   <script src="../../js/auth.js"></script>
-  
+  <script src="../../js/feature2-common.js"></script>
+  <script src="../../js/customer-rooms.js"></script>
 </body>
 </html>

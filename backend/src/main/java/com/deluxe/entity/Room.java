@@ -27,4 +27,13 @@ public class Room {
     @Column(nullable = false, length = 20)
     @Builder.Default
     private RoomStatus status = RoomStatus.AVAILABLE;
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getRoomNumber() { return roomNumber; }
+    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
+    public Long getRoomTypeId() { return roomTypeId; }
+    public void setRoomTypeId(Long roomTypeId) { this.roomTypeId = roomTypeId; }
+    public RoomStatus getStatus() { return status; }
+    public void setStatus(RoomStatus status) { this.status = status; }
 }

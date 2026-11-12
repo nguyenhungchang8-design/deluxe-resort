@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Deluxe - Lễ tân - Đặt phòng</title>
@@ -51,37 +51,164 @@
 
     <section class="ftco-section bg-light">
       <div class="container">
-        <p class="mb-4">Quản lý danh sách phòng, đặt phòng, nhận và trả phòng</p>
-      <div class="row">
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">5</h3><p class="mb-0">Nhận phòng hôm nay</p></div></div>
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">4</h3><p class="mb-0">Trả phòng hôm nay</p></div></div>
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">12</h3><p class="mb-0">Phòng đang trống</p></div></div>
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">3</h3><p class="mb-0">Chờ xác nhận</p></div></div>
-      </div>
-      <div class="table-responsive bg-white p-3">
-        <table class="table table-hover mb-0">
-          <thead>
-          <tr>
-            <th>Mã</th>
-            <th>Khách hàng</th>
-            <th>Phòng</th>
-            <th>Thời gian</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr><td>B001</td><td>Nguyen Van A</td><td>101</td><td>21/10 - 23/10</td><td>Chờ xử lý</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Xác nhận</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Hủy bỏ</button></td></tr>
-          <tr><td>B002</td><td>Tran Thi B</td><td>201</td><td>22/10 - 25/10</td><td>Đã xác nhận</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Xác nhận</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Hủy bỏ</button></td></tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+          <div>
+            <h3 class="mb-1" style="font-family:'Playfair Display',serif">Quản lý Đặt phòng</h3>
+            <p class="mb-0 text-muted">Tìm phòng trống, tạo đặt phòng tại quầy, xác nhận hoặc hủy đặt phòng</p>
+          </div>
+          <div>
+            <button type="button" id="btn-open-create-booking" class="btn btn-primary mr-2">+ Tạo đặt phòng mới</button>
+            <button type="button" id="btn-refresh-bookings" class="btn btn-outline-secondary">Làm mới</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6 col-md-3 mb-4"><div class="bg-white p-4 text-center shadow-sm rounded"><h3 class="mb-1 text-primary" id="stat-today-checkin" style="font-family:'Playfair Display',serif">0</h3><p class="mb-0 small text-muted">Nhận phòng hôm nay</p></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="bg-white p-4 text-center shadow-sm rounded"><h3 class="mb-1 text-warning" id="stat-today-checkout" style="font-family:'Playfair Display',serif">0</h3><p class="mb-0 small text-muted">Trả phòng hôm nay</p></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="bg-white p-4 text-center shadow-sm rounded"><h3 class="mb-1 text-success" id="stat-available-rooms" style="font-family:'Playfair Display',serif">0</h3><p class="mb-0 small text-muted">Phòng đang trống</p></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="bg-white p-4 text-center shadow-sm rounded"><h3 class="mb-1 text-danger" id="stat-pending-bookings" style="font-family:'Playfair Display',serif">0</h3><p class="mb-0 small text-muted">Chờ xác nhận</p></div></div>
+        </div>
+
+        <div id="reception-bookings-alert" class="alert d-none" role="alert"></div>
+
+        <div class="bg-white p-3 mb-3 rounded shadow-sm">
+          <div class="row align-items-center">
+            <div class="col-md-4 mb-2 mb-md-0">
+              <label for="rec-booking-status-filter" class="small font-weight-bold text-muted mb-1">Lọc theo trạng thái</label>
+              <select id="rec-booking-status-filter" class="form-control">
+                <option value="ALL">Tất cả trạng thái</option>
+                <option value="PENDING">Chờ xác nhận (PENDING)</option>
+                <option value="CONFIRMED">Đã xác nhận (CONFIRMED)</option>
+                <option value="CHECKED_IN">Đang lưu trú (CHECKED_IN)</option>
+                <option value="CHECKED_OUT">Đã trả phòng (CHECKED_OUT)</option>
+                <option value="CANCELLED">Đã hủy (CANCELLED)</option>
+              </select>
+            </div>
+            <div class="col-md-8">
+              <label for="rec-booking-search" class="small font-weight-bold text-muted mb-1">Tìm kiếm nhanh</label>
+              <input type="text" id="rec-booking-search" class="form-control" placeholder="Tìm theo mã đơn, tên khách, email, số phòng hoặc hạng phòng...">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive bg-white p-3 rounded shadow-sm">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Khách hàng</th>
+                <th>Phòng</th>
+                <th>Thời gian</th>
+                <th>Chi phí</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="reception-bookings-tbody">
+              <tr><td colspan="7" class="text-center py-4 text-muted">Đang tải danh sách đặt phòng...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
+    <!-- Modal Chi tiết Đặt phòng -->
+    <div class="modal fade" id="recBookingDetailModal" tabindex="-1" role="dialog" aria-labelledby="recBookingDetailTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title text-white" id="recBookingDetailTitle">Chi tiết đơn đặt phòng <span id="rec-dt-id"></span></h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Đóng">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-sm table-borderless mb-0">
+              <tbody>
+                <tr><th style="width:36%">Trạng thái:</th><td id="rec-dt-status"></td></tr>
+                <tr><th>Khách hàng:</th><td id="rec-dt-customer"></td></tr>
+                <tr><th>Phòng:</th><td id="rec-dt-room" class="font-weight-bold"></td></tr>
+                <tr><th>Nhận / Trả:</th><td id="rec-dt-dates"></td></tr>
+                <tr><th>Đơn giá:</th><td id="rec-dt-rate"></td></tr>
+                <tr><th>Tổng tiền:</th><td id="rec-dt-total" class="font-weight-bold text-primary"></td></tr>
+                <tr><th>Tiền cọc:</th><td id="rec-dt-deposit"></td></tr>
+                <tr><th>Ngày tạo:</th><td id="rec-dt-created"></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <div id="rec-dt-actions"></div>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Tạo Đặt phòng mới (Walk-in / Tại quầy) -->
+    <div class="modal fade" id="recCreateBookingModal" tabindex="-1" role="dialog" aria-labelledby="recCreateBookingTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <form id="rec-create-booking-form">
+            <div class="modal-header bg-dark text-white">
+              <h5 class="modal-title text-white" id="recCreateBookingTitle">Tạo đặt phòng mới tại quầy</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Đóng">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="rec-create-booking-alert" class="alert d-none" role="alert"></div>
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <label for="rec-bk-customer" class="small font-weight-bold">Khách hàng</label>
+                  <select id="rec-bk-customer" class="form-control"></select>
+                </div>
+                <div class="col-md-6 form-group">
+                  <label for="rec-bk-roomtype" class="small font-weight-bold">Lọc theo hạng phòng</label>
+                  <select id="rec-bk-roomtype" class="form-control">
+                    <option value="">Tất cả hạng phòng</option>
+                  </select>
+                </div>
+                <div class="col-md-5 form-group">
+                  <label for="rec-bk-checkin" class="small font-weight-bold">Ngày nhận phòng</label>
+                  <input type="date" id="rec-bk-checkin" class="form-control" required>
+                </div>
+                <div class="col-md-5 form-group">
+                  <label for="rec-bk-checkout" class="small font-weight-bold">Ngày trả phòng</label>
+                  <input type="date" id="rec-bk-checkout" class="form-control" required>
+                </div>
+                <div class="col-md-2 form-group d-flex align-items-end">
+                  <button type="button" id="btn-rec-find-avail" class="btn btn-outline-primary btn-block">Tìm</button>
+                </div>
+                <div class="col-md-8 form-group">
+                  <label for="rec-bk-room" class="small font-weight-bold">Chọn phòng trống</label>
+                  <select id="rec-bk-room" class="form-control" required></select>
+                </div>
+                <div class="col-md-4 form-group">
+                  <label for="rec-bk-deposit" class="small font-weight-bold">Tiền cọc (VNĐ)</label>
+                  <input type="number" id="rec-bk-deposit" class="form-control" min="0" step="10000" value="0">
+                </div>
+              </div>
+              <div class="p-3 bg-light rounded border small">
+                <strong>Dự tính tiền phòng:</strong> <span id="rec-bk-estimated" class="text-primary"></span>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+              <button type="submit" class="btn btn-primary">Tạo đặt phòng</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/staff-common.js"></script>
+    <script src="../../js/feature2-common.js"></script>
+    <script src="../../js/reception-bookings.js"></script>
   </body>
 </html>
 
