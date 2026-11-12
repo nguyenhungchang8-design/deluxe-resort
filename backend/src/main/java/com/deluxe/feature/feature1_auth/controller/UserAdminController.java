@@ -1,5 +1,6 @@
 package com.deluxe.feature.feature1_auth.controller;
 
+import com.deluxe.feature.feature1_auth.dto.AdminUpdateUserRequest;
 import com.deluxe.feature.feature1_auth.dto.CreateStaffRequest;
 import com.deluxe.feature.feature1_auth.dto.UserResponseDto;
 import com.deluxe.feature.feature1_auth.service.UserService;
@@ -43,6 +44,32 @@ public class UserAdminController {
         try {
             UserResponseDto created = userService.createStaff(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    /**
+     * Admin cập nhật thông tin người dùng (Sửa)
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody AdminUpdateUserRequest request) {
+        try {
+            UserResponseDto updated = userService.adminUpdateUser(id, request);
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    /**
+     * Admin khóa / mở khóa tài khoản
+     */
+    @PutMapping("/{id}/toggle-status")
+    public ResponseEntity<?> toggleUserStatus(@PathVariable Long id) {
+        try {
+            UserResponseDto updated = userService.toggleUserStatus(id);
+            return ResponseEntity.ok(updated);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }

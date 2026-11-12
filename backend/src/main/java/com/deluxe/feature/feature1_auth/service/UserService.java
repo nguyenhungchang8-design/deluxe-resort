@@ -1,10 +1,7 @@
 package com.deluxe.feature.feature1_auth.service;
 
 import com.deluxe.entity.User;
-import com.deluxe.feature.feature1_auth.dto.ChangePasswordRequest;
-import com.deluxe.feature.feature1_auth.dto.CreateStaffRequest;
-import com.deluxe.feature.feature1_auth.dto.UpdateProfileRequest;
-import com.deluxe.feature.feature1_auth.dto.UserResponseDto;
+import com.deluxe.feature.feature1_auth.dto.*;
 import com.deluxe.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +14,7 @@ import java.util.stream.Collectors;
  * Service xử lý các nghiệp vụ User:
  * - UC04: Cập nhật hồ sơ cá nhân
  * - UC05: Đổi mật khẩu
- * - UC06: Admin tạo và quản lý tài khoản nhân viên
+ * - UC06: Admin tạo và quản lý tài khoản nhân viên (Thêm, Sửa, Khóa/Mở khóa)
  */
 @Service
 public class UserService {
@@ -82,7 +79,7 @@ public class UserService {
     }
 
     /**
-     * UC06: Admin tạo tài khoản nhân viên (Receptionist, Waiter, Housekeeping, Manager)
+     * UC06: Admin tạo tài khoản nhân viên / người dùng mới
      */
     @Transactional
     public UserResponseDto createStaff(CreateStaffRequest request) {
@@ -104,9 +101,63 @@ public class UserService {
                 .fullName(request.getFullName().trim())
                 .email(request.getEmail().trim())
                 .role(role)
+                .active(true)
                 .build();
 
         User saved = userRepository.save(staff);
+        return toDto(saved);
+    }
+
+    /**
+     * Admin sửa thông tin tài khoản (Họ tên, email, role, đổi pass mới nếu có)
+     */
+    @Transactional
+    public UserResponseDto adminUpdateUser(Long userId, AdminUpdateUserRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy người dùng với ID: " + userId));
+
+        if (!user.getEmail().equalsIgnoreCase(request.getEmail().trim())) {
+            if (userRepository.existsByEmail(request.getEmail().trim())) {
+                throw new IllegalArgumentException("Email '" + request.getEmail() + "' đã được sử dụng");
+            }
+        }
+
+        user.setFullName(request.getFullName().trim());
+        user.setEmail(request.getEmail().trim());
+
+        String role = request.getRole().trim();
+        if (!role.startsWith("ROLE_")) {
+            role = "ROLE_" + role.toUpperCase();
+        }
+        user.setRole(role);
+
+        if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
+            if (request.getNewPassword().length() < 6) {
+                throw new IllegalArgumentException("Mật khẩu mới phải có tối thiểu 6 ký tự");
+            }
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        }
+
+        User saved = userRepository.save(user);
+        return toDto(saved);
+    }
+
+    /**
+     * Admin khóa / mở khóa tài khoản
+     */
+    @Transactional
+    public UserResponseDto toggleUserStatus(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy người dùng với ID: " + userId));
+
+        if ("ROLE_ADMIN".equalsIgnoreCase(user.getRole())) {
+            throw new IllegalArgumentException("Không thể khóa tài khoản Quản trị viên (ADMIN)");
+        }
+
+        boolean currentStatus = user.getActive() == null || user.getActive();
+        user.setActive(!currentStatus);
+
+        User saved = userRepository.save(user);
         return toDto(saved);
     }
 
@@ -129,6 +180,7 @@ public class UserService {
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .role(user.getRole())
+                .active(user.getActive() == null || user.getActive())
                 .build();
     }
 }

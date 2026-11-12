@@ -1,12 +1,12 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
   <head>
     <title>Deluxe - Quản trị - Người dùng</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="../../css/animate.css">
     <link rel="stylesheet" href="../../css/ionicons.min.css">
@@ -24,62 +24,328 @@
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="dashboard.html" class="nav-link">Bảng điều khiển</a></li>
-          <li class="nav-item active"><a href="users.html" class="nav-link">Người dùng</a></li>
-          <li class="nav-item"><a href="rooms.html" class="nav-link">Phòng nghỉ</a></li>
-          <li class="nav-item"><a href="reports.html" class="nav-link">Báo cáo</a></li>
-          <li class="nav-item"><span class="nav-link" id="user-name"></span></li>
-          <li class="nav-item"><a href="#" class="nav-link" id="btn-logout">Đăng xuất</a></li>
+            <li class="nav-item"><a href="dashboard.html" class="nav-link">Bảng điều khiển</a></li>
+            <li class="nav-item active"><a href="users.html" class="nav-link">Người dùng</a></li>
+            <li class="nav-item"><a href="rooms.html" class="nav-link">Phòng nghỉ</a></li>
+            <li class="nav-item"><a href="reports.html" class="nav-link">Báo cáo</a></li>
+            <li class="nav-item"><span class="nav-link" id="user-name"></span></li>
+            <li class="nav-item"><a href="#" class="nav-link" id="btn-logout">Đăng xuất</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 300px;">
+    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 260px;">
       <div class="overlay"></div>
       <div class="container">
-        <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
+        <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center" style="height: 260px;">
           <div class="col-md-9 text-center d-flex align-items-end justify-content-center">
-            <div class="text">
-              <p class="breadcrumbs mb-2"><span>Quản trị</span></p>
-              <h1 class="mb-4 bread">Quản lý người dùng</h1>
+            <div class="text mb-4">
+              <p class="breadcrumbs mb-2"><span>Quản trị viên</span></p>
+              <h1 class="mb-3 bread">Quản lý người dùng & Nhân viên</h1>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <section class="ftco-section bg-light">
+    <section class="ftco-section bg-light py-5">
       <div class="container">
-        <p class="mb-4">Quản lý và thống kê toàn hệ thống</p>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h4 class="mb-1 font-weight-bold">Danh sách tài khoản hệ thống</h4>
+            <p class="text-muted small mb-0">Quản lý phân quyền, thêm mới nhân viên, sửa và khóa tài khoản</p>
+          </div>
+          <button class="btn btn-primary px-4 py-2" data-toggle="modal" data-target="#modal-add-user">
+            <span class="icon-plus mr-1"></span> Thêm tài khoản mới
+          </button>
+        </div>
 
-      <div class="table-responsive bg-white p-3">
-        <table class="table table-hover mb-0">
-          <thead>
-          <tr>
-            <th>ID</th>
-            <th>Tên đăng nhập</th>
-            <th>Họ và tên</th>
-            <th>Vai trò</th>
-            <th>Thao tác</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr><td>1</td><td>admin</td><td>Administrator</td><td>Admin</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Sửa</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Khóa</button></td></tr>
-          <tr><td>2</td><td>reception</td><td>Le Tan</td><td>Receptionist</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Sửa</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Khóa</button></td></tr>
-          <tr><td>3</td><td>housekeeping</td><td>Buong Phong</td><td>Housekeeping</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Sửa</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Khóa</button></td></tr>
-          <tr><td>4</td><td>accountant</td><td>Ke Toan</td><td>Accountant</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Sửa</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Khóa</button></td></tr>
-          <tr><td>5</td><td>waiter</td><td>Phuc Vu</td><td>Waiter</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Sửa</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Khóa</button></td></tr>
-          <tr><td>6</td><td>customer</td><td>Khach Hang</td><td>Customer</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Sửa</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Khóa</button></td></tr>
-          </tbody>
-        </table>
-      </div>
+        <div id="alert-box" class="alert d-none"></div>
+
+        <div class="card shadow-sm border-0">
+          <div class="table-responsive p-3">
+            <table class="table table-hover align-middle mb-0" id="table-users">
+              <thead class="thead-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Tên đăng nhập</th>
+                  <th>Họ và tên</th>
+                  <th>Email</th>
+                  <th>Vai trò (Role)</th>
+                  <th>Trạng thái</th>
+                  <th class="text-center">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="user-list-body">
+                <tr><td colspan="7" class="text-center py-4">Đang tải dữ liệu...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
 
+    <!-- MODAL 1: THÊM TÀI KHOẢN MỚI (UC06) -->
+    <div class="modal fade" id="modal-add-user" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title font-weight-bold">Tạo Tài Khoản Nhân Viên Mới</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="form-create-user">
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="font-weight-bold">Tên đăng nhập (Username):</label>
+                <input type="text" id="add-username" class="form-control" required minlength="3" placeholder="Ví dụ: letan02">
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bold">Mật khẩu:</label>
+                <input type="password" id="add-password" class="form-control" required minlength="6" placeholder="Tối thiểu 6 ký tự">
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bold">Họ và tên:</label>
+                <input type="text" id="add-fullname" class="form-control" required placeholder="Ví dụ: Nguyễn Văn A">
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bold">Địa chỉ Email:</label>
+                <input type="email" id="add-email" class="form-control" required placeholder="nhanvien@deluxe.com">
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bold">Vai trò (Role):</label>
+                <select id="add-role" class="form-control" required>
+                  <option value="ROLE_RECEPTIONIST">Lễ tân (Receptionist)</option>
+                  <option value="ROLE_WAITER">Nhân viên phục vụ (Waiter)</option>
+                  <option value="ROLE_HOUSEKEEPING">Buồng phòng (Housekeeping)</option>
+                  <option value="ROLE_ACCOUNTANT">Kế toán (Accountant)</option>
+                  <option value="ROLE_CUSTOMER">Khách hàng (Customer)</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+              <button type="submit" class="btn btn-primary px-4">Tạo tài khoản</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: SỬA TÀI KHOẢN -->
+    <div class="modal fade" id="modal-edit-user" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title font-weight-bold">Sửa Thông Tin Tài Khoản</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="form-edit-user">
+            <div class="modal-body">
+              <input type="hidden" id="edit-id">
+              <div class="form-group">
+                <label class="font-weight-bold">Tên đăng nhập:</label>
+                <input type="text" id="edit-username" class="form-control" disabled style="background:#e9ecef;">
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bold">Họ và tên:</label>
+                <input type="text" id="edit-fullname" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bold">Địa chỉ Email:</label>
+                <input type="email" id="edit-email" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bold">Vai trò (Role):</label>
+                <select id="edit-role" class="form-control" required>
+                  <option value="ROLE_ADMIN">Quản trị viên (Admin)</option>
+                  <option value="ROLE_RECEPTIONIST">Lễ tân (Receptionist)</option>
+                  <option value="ROLE_WAITER">Nhân viên phục vụ (Waiter)</option>
+                  <option value="ROLE_HOUSEKEEPING">Buồng phòng (Housekeeping)</option>
+                  <option value="ROLE_ACCOUNTANT">Kế toán (Accountant)</option>
+                  <option value="ROLE_CUSTOMER">Khách hàng (Customer)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="font-weight-bold">Đổi mật khẩu mới (Nếu có):</label>
+                <input type="password" id="edit-password" class="form-control" placeholder="Để trống nếu không muốn đổi mật khẩu">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+              <button type="submit" class="btn btn-primary px-4">Cập nhật</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/staff-common.js"></script>
+
+    <script>
+      let usersData = [];
+
+      function showMsg(text, isError = false) {
+        const box = $('#alert-box');
+        box.removeClass('d-none alert-success alert-danger')
+           .addClass(isError ? 'alert-danger' : 'alert-success')
+           .text(text).fadeIn();
+        setTimeout(() => box.fadeOut(), 4000);
+      }
+
+      function loadUsers() {
+        $.ajax({
+          url: '/api/admin/users',
+          type: 'GET',
+          success: function(list) {
+            usersData = list;
+            renderTable(list);
+          },
+          error: function() {
+            $('#user-list-body').html('<tr><td colspan="7" class="text-center text-danger py-4">Không thể tải dữ liệu người dùng</td></tr>');
+          }
+        });
+      }
+
+      function renderTable(list) {
+        if (!list || list.length === 0) {
+          $('#user-list-body').html('<tr><td colspan="7" class="text-center py-4">Chưa có người dùng nào</td></tr>');
+          return;
+        }
+
+        let html = '';
+        list.forEach(u => {
+          const isActive = u.active !== false;
+          const statusBadge = isActive 
+            ? '<span class="badge badge-success px-2 py-1">Đang hoạt động</span>'
+            : '<span class="badge badge-danger px-2 py-1">Đã bị khóa</span>';
+          
+          const lockBtnText = isActive ? 'Khóa' : 'Mở khóa';
+          const lockBtnClass = isActive ? 'btn-danger' : 'btn-success';
+          const isAdmin = u.role === 'ROLE_ADMIN' || u.role === 'Admin';
+
+          html += `
+            <tr>
+              <td><strong>#${u.id}</strong></td>
+              <td><strong>${u.username}</strong></td>
+              <td>${u.fullName || ''}</td>
+              <td>${u.email || ''}</td>
+              <td><span class="badge badge-info px-2 py-1">${u.role}</span></td>
+              <td>${statusBadge}</td>
+              <td class="text-center">
+                <button class="btn btn-warning btn-sm text-white mr-1" onclick="openEditModal(${u.id})">
+                  <span class="icon-edit"></span> Sửa
+                </button>
+                ${isAdmin ? '' : `
+                  <button class="btn ${lockBtnClass} btn-sm" onclick="toggleStatus(${u.id})">
+                    ${lockBtnText}
+                  </button>
+                `}
+              </td>
+            </tr>
+          `;
+        });
+        $('#user-list-body').html(html);
+      }
+
+      function openEditModal(id) {
+        const user = usersData.find(u => u.id === id);
+        if (!user) return;
+        $('#edit-id').val(user.id);
+        $('#edit-username').val(user.username);
+        $('#edit-fullname').val(user.fullName || '');
+        $('#edit-email').val(user.email || '');
+        $('#edit-role').val(user.role);
+        $('#edit-password').val('');
+        $('#modal-edit-user').modal('show');
+      }
+
+      function toggleStatus(id) {
+        if (!confirm('Bạn có chắc chắn muốn thay đổi trạng thái khóa/mở khóa tài khoản này?')) return;
+        $.ajax({
+          url: `/api/admin/users/${id}/toggle-status`,
+          type: 'PUT',
+          success: function(res) {
+            showMsg('Thay đổi trạng thái tài khoản thành công!');
+            loadUsers();
+          },
+          error: function(xhr) {
+            const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Thao tác thất bại';
+            showMsg(msg, true);
+          }
+        });
+      }
+
+      $(document).ready(function() {
+        loadUsers();
+
+        // Xử lý tạo mới tài khoản
+        $('#form-create-user').on('submit', function(e) {
+          e.preventDefault();
+          const req = {
+            username: $('#add-username').val().trim(),
+            password: $('#add-password').val().trim(),
+            fullName: $('#add-fullname').val().trim(),
+            email: $('#add-email').val().trim(),
+            role: $('#add-role').val()
+          };
+
+          $.ajax({
+            url: '/api/admin/users/staff',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(req),
+            success: function() {
+              $('#modal-add-user').modal('hide');
+              $('#form-create-user')[0].reset();
+              showMsg('Tạo tài khoản nhân viên mới thành công!');
+              loadUsers();
+            },
+            error: function(xhr) {
+              const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Tạo tài khoản thất bại';
+              alert(msg);
+            }
+          });
+        });
+
+        // Xử lý cập nhật sửa tài khoản
+        $('#form-edit-user').on('submit', function(e) {
+          e.preventDefault();
+          const id = $('#edit-id').val();
+          const req = {
+            fullName: $('#edit-fullname').val().trim(),
+            email: $('#edit-email').val().trim(),
+            role: $('#edit-role').val(),
+            newPassword: $('#edit-password').val().trim()
+          };
+
+          $.ajax({
+            url: `/api/admin/users/${id}`,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(req),
+            success: function() {
+              $('#modal-edit-user').modal('hide');
+              showMsg('Cập nhật thông tin tài khoản thành công!');
+              loadUsers();
+            },
+            error: function(xhr) {
+              const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Cập nhật thất bại';
+              alert(msg);
+            }
+          });
+        });
+      });
+    </script>
   </body>
 </html>
-
