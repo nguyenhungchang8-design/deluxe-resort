@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .map(u -> org.springframework.security.core.userdetails.User
                         .withUsername(u.getUsername())
                         .password(u.getPassword())
+                        .disabled(Boolean.FALSE.equals(u.getActive()))
                         .authorities(new SimpleGrantedAuthority(u.getRole()))
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("Khong tim thay user"));

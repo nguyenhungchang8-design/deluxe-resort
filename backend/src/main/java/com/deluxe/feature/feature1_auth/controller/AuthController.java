@@ -71,8 +71,12 @@ public class AuthController {
             SecurityContextHolder.setContext(ctx);
             contextRepo.saveContext(ctx, request, response);
             return ResponseEntity.ok(toDto(users.findByUsername(req.username()).orElseThrow()));
+        } catch (org.springframework.security.authentication.DisabledException e) {
+            return ResponseEntity.status(403).body(Map.of("message", "Tài khoản của bạn đã bị khóa bởi Quản trị viên"));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body(Map.of("message", "Sai tai khoan hoac mat khau"));
+            return ResponseEntity.status(401).body(Map.of("message", "Sai tài khoản hoặc mật khẩu"));
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(Map.of("message", "Đăng nhập không thành công: " + e.getMessage()));
         }
     }
 
