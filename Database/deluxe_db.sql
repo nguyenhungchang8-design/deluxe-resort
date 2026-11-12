@@ -296,12 +296,12 @@ GO
 -- 1. Chèn người dùng mẫu cho đủ 5 vai trò (Password BCrypt: admin123 cho admin, 123456 cho tài khoản khác)
 SET IDENTITY_INSERT dbo.users ON;
 INSERT INTO dbo.users (id, username, email, password, full_name, role) VALUES
-(1, N'admin',       N'admin@deluxe.com',        N'$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQabh42', N'Quản Trị Viên',        N'ROLE_ADMIN'),
-(2, N'customer',    N'customer@deluxe.com',     N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Nguyễn Văn Khách',     N'ROLE_CUSTOMER'),
-(3, N'reception',   N'reception@deluxe.com',    N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Lê Thị Lễ Tân',        N'ROLE_RECEPTIONIST'),
-(4, N'housekeeping',N'housekeeping@deluxe.com', N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Trần Văn Buồng Phòng', N'ROLE_HOUSEKEEPING'),
-(5, N'accountant',  N'accountant@deluxe.com',   N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Phạm Thu Kế Toán',     N'ROLE_ACCOUNTANT'),
-(6, N'waiter',      N'waiter@deluxe.com',       N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Hoàng Phục Vụ',        N'ROLE_WAITER');
+(1, N'admin',       N'admin@deluxe.com',        N'$2a$10$jjg/HHmSNMIVSbmWBgq1XeNBSbNvzvsNlR2B3p/l04VmzUTce05zm', N'Quản Trị Viên',        N'ROLE_ADMIN'),
+(2, N'customer',    N'customer@deluxe.com',     N'$2a$10$7fw16lRtAZOEGjkv0cEgCOzpUrE0A6XiB869nAmCWzYrM3w8e7CN.', N'Nguyễn Văn Khách',     N'ROLE_CUSTOMER'),
+(3, N'reception',   N'reception@deluxe.com',    N'$2a$10$7fw16lRtAZOEGjkv0cEgCOzpUrE0A6XiB869nAmCWzYrM3w8e7CN.', N'Lê Thị Lễ Tân',        N'ROLE_RECEPTIONIST'),
+(4, N'housekeeping',N'housekeeping@deluxe.com', N'$2a$10$7fw16lRtAZOEGjkv0cEgCOzpUrE0A6XiB869nAmCWzYrM3w8e7CN.', N'Trần Văn Buồng Phòng', N'ROLE_HOUSEKEEPING'),
+(5, N'accountant',  N'accountant@deluxe.com',   N'$2a$10$7fw16lRtAZOEGjkv0cEgCOzpUrE0A6XiB869nAmCWzYrM3w8e7CN.', N'Phạm Thu Kế Toán',     N'ROLE_ACCOUNTANT'),
+(6, N'waiter',      N'waiter@deluxe.com',       N'$2a$10$7fw16lRtAZOEGjkv0cEgCOzpUrE0A6XiB869nAmCWzYrM3w8e7CN.', N'Hoàng Phục Vụ',        N'ROLE_WAITER');
 SET IDENTITY_INSERT dbo.users OFF;
 GO
 

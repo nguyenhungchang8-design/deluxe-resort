@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <title>Deluxe - Hồ sơ cá nhân & Đổi mật khẩu</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/animate.css">
+    <link rel="stylesheet" href="../../css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../../css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../../css/magnific-popup.css">
+    <link rel="stylesheet" href="../../css/aos.css">
+    <link rel="stylesheet" href="../../css/ionicons.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../../css/jquery.timepicker.css">
+    <link rel="stylesheet" href="../../css/flaticon.css">
+    <link rel="stylesheet" href="../../css/icomoon.css">
+    <link rel="stylesheet" href="../../css/style.css">
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" href="home.html">Deluxe</a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
+
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav ml-auto">
+	          <li class="nav-item"><a href="home.html" class="nav-link">Trang chủ</a></li>
+	          <li class="nav-item"><a href="rooms.html" class="nav-link">Phòng nghỉ</a></li>
+	          <li class="nav-item"><a href="bookings.html" class="nav-link">Đặt phòng của tôi</a></li>
+	          <li class="nav-item"><a href="restaurant.html" class="nav-link">Nhà hàng</a></li>
+	          <li class="nav-item active"><a href="profile.html" class="nav-link">Tài khoản</a></li>
+	          <li class="nav-item"><a href="#" class="nav-link" id="btn-logout">Đăng xuất</a></li>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+    <!-- END nav -->
+
+    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 350px;">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center" style="height: 350px;">
+          <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+          	<div class="text mb-4">
+	            <h1 class="mb-3 bread">Tài Khoản & Bảo Mật</h1>
+	            <p class="breadcrumbs"><span class="mr-2"><a href="home.html">Trang chủ</a></span> <span>Hồ sơ cá nhân</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="ftco-section bg-light">
+    	<div class="container">
+    		<div class="row">
+          <!-- Cột 1: Thông tin cá nhân (UC04) -->
+    			<div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0 p-4">
+              <h4 class="mb-4 text-primary font-weight-bold"><span class="icon-user mr-2"></span>Thông Tin Cá Nhân (UC04)</h4>
+              <div id="profile-alert" class="alert d-none"></div>
+              
+              <form id="form-profile">
+                <div class="form-group">
+                  <label class="font-weight-bold">Tên đăng nhập (Username):</label>
+                  <input type="text" id="prof-username" class="form-control" disabled style="background-color: #e9ecef;">
+                </div>
+                <div class="form-group">
+                  <label class="font-weight-bold">Vai trò (Role):</label>
+                  <input type="text" id="prof-role" class="form-control" disabled style="background-color: #e9ecef;">
+                </div>
+                <div class="form-group">
+                  <label class="font-weight-bold">Họ và tên:</label>
+                  <input type="text" id="prof-fullname" class="form-control" required placeholder="Nhập họ và tên">
+                </div>
+                <div class="form-group">
+                  <label class="font-weight-bold">Địa chỉ Email:</label>
+                  <input type="email" id="prof-email" class="form-control" required placeholder="name@example.com">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block py-2">
+                  <span class="icon-save mr-1"></span> Cập nhật thông tin
+                </button>
+              </form>
+            </div>
+    			</div>
+
+          <!-- Cột 2: Đổi mật khẩu (UC05) -->
+          <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-0 p-4">
+              <h4 class="mb-4 text-warning font-weight-bold"><span class="icon-lock mr-2"></span>Đổi Mật Khẩu (UC05)</h4>
+              <div id="password-alert" class="alert d-none"></div>
+
+              <form id="form-change-password">
+                <div class="form-group">
+                  <label class="font-weight-bold">Mật khẩu hiện tại:</label>
+                  <input type="password" id="pass-current" class="form-control" required placeholder="Nhập mật khẩu đang dùng">
+                </div>
+                <div class="form-group">
+                  <label class="font-weight-bold">Mật khẩu mới:</label>
+                  <input type="password" id="pass-new" class="form-control" required minlength="6" placeholder="Mật khẩu mới (tối thiểu 6 ký tự)">
+                </div>
+                <div class="form-group">
+                  <label class="font-weight-bold">Xác nhận mật khẩu mới:</label>
+                  <input type="password" id="pass-confirm" class="form-control" required minlength="6" placeholder="Nhập lại mật khẩu mới">
+                </div>
+                <button type="submit" class="btn btn-warning text-white btn-block py-2">
+                  <span class="icon-key mr-1"></span> Xác nhận đổi mật khẩu
+                </button>
+              </form>
+            </div>
+          </div>
+    		</div>
+    	</div>
+    </section>
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+      <div class="container text-center">
+        <p>Deluxe Resort Management &copy; 2026</p>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+
+    <script>
+      $(document).ready(function() {
+        // 1. Tải thông tin người dùng đang đăng nhập
+        $.ajax({
+          url: '/api/auth/me',
+          type: 'GET',
+          success: function(user) {
+            $('#prof-username').val(user.username);
+            $('#prof-role').val(user.role);
+            $('#prof-fullname').val(user.fullName || '');
+            $('#prof-email').val(user.email || '');
+          },
+          error: function() {
+            window.location.href = '/login';
+          }
+        });
+
+        // 2. Xử lý Cập nhật Profile (UC04)
+        $('#form-profile').on('submit', function(e) {
+          e.preventDefault();
+          const fullName = $('#prof-fullname').val().trim();
+          const email = $('#prof-email').val().trim();
+          const alertBox = $('#profile-alert');
+
+          $.ajax({
+            url: '/api/auth/profile',
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({ fullName: fullName, email: email }),
+            success: function(res) {
+              alertBox.removeClass('d-none alert-danger').addClass('alert-success')
+                      .text('Cập nhật thông tin hồ sơ thành công!').fadeIn();
+              setTimeout(() => alertBox.fadeOut(), 4000);
+            },
+            error: function(xhr) {
+              const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Cập nhật thất bại';
+              alertBox.removeClass('d-none alert-success').addClass('alert-danger')
+                      .text(msg).fadeIn();
+            }
+          });
+        });
+
+        // 3. Xử lý Đổi Mật Khẩu (UC05)
+        $('#form-change-password').on('submit', function(e) {
+          e.preventDefault();
+          const currentPassword = $('#pass-current').val();
+          const newPassword = $('#pass-new').val();
+          const confirmPassword = $('#pass-confirm').val();
+          const alertBox = $('#password-alert');
+
+          if (newPassword !== confirmPassword) {
+            alertBox.removeClass('d-none alert-success').addClass('alert-danger')
+                    .text('Mật khẩu mới và xác nhận mật khẩu không khớp nhau!').fadeIn();
+            return;
+          }
+
+          $.ajax({
+            url: '/api/auth/change-password',
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({ currentPassword: currentPassword, newPassword: newPassword }),
+            success: function(res) {
+              alertBox.removeClass('d-none alert-danger').addClass('alert-success')
+                      .text('Đổi mật khẩu thành công! Vui lòng ghi nhớ mật khẩu mới.').fadeIn();
+              $('#form-change-password')[0].reset();
+              setTimeout(() => alertBox.fadeOut(), 4000);
+            },
+            error: function(xhr) {
+              const msg = xhr.responseJSON ? xhr.responseJSON.message : 'Đổi mật khẩu thất bại';
+              alertBox.removeClass('d-none alert-success').addClass('alert-danger')
+                      .text(msg).fadeIn();
+            }
+          });
+        });
+
+        // 4. Xử lý Đăng xuất (UC02)
+        $('#btn-logout').on('click', function(e) {
+          e.preventDefault();
+          $.post('/api/auth/logout', function() {
+            window.location.href = '/login';
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

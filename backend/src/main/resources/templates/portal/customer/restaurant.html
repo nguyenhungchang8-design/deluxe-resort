@@ -1,29 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
   <head>
-    <title>Deluxe - Free Bootstrap 4 Template by Colorlib</title>
+    <title>Deluxe - Nhà hàng & Thực đơn ẩm thực</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../../css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="../../css/animate.css">
-    
     <link rel="stylesheet" href="../../css/owl.carousel.min.css">
     <link rel="stylesheet" href="../../css/owl.theme.default.min.css">
     <link rel="stylesheet" href="../../css/magnific-popup.css">
-
     <link rel="stylesheet" href="../../css/aos.css">
-
     <link rel="stylesheet" href="../../css/ionicons.min.css">
-
     <link rel="stylesheet" href="../../css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="../../css/jquery.timepicker.css">
-
-    
     <link rel="stylesheet" href="../../css/flaticon.css">
     <link rel="stylesheet" href="../../css/icomoon.css">
     <link rel="stylesheet" href="../../css/style.css">
@@ -41,14 +35,14 @@
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item"><a href="home.html" class="nav-link">Trang chủ</a></li>
 	          <li class="nav-item"><a href="rooms.html" class="nav-link">Phòng nghỉ</a></li>
-	          <li class="nav-item"><a href="bookings.html" class="nav-link">Đặt phòng của tôi</a></li>
 	          <li class="nav-item active"><a href="restaurant.html" class="nav-link">Nhà hàng</a></li>
 	          <li class="nav-item"><a href="about.html" class="nav-link">Giới thiệu</a></li>
+	          <li class="nav-item"><span class="nav-link" id="user-name"></span></li>
+	          <li class="nav-item"><a href="#" class="nav-link" id="btn-logout">Đăng xuất</a></li>
 	        </ul>
 	      </div>
 	    </div>
 	  </nav>
-    <!-- END nav -->
 
     <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg');">
       <div class="overlay"></div>
@@ -57,7 +51,7 @@
           <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
           	<div class="text">
 	            <p class="breadcrumbs mb-2"><span class="mr-2"><a href="home.html">Trang chủ</a></span> <span>Nhà hàng</span></p>
-	            <h1 class="mb-4 bread">Restaurants</h1>
+	            <h1 class="mb-4 bread">Ẩm Thực & Gọi Món</h1>
             </div>
           </div>
         </div>
@@ -70,136 +64,138 @@
 					<div class="col-md-5 p-md-5 img img-2 img-3 d-flex justify-content-center align-items-center" style="background-image: url(../../images/about.jpg);">
 					</div>
 					<div class="col-md-7 py-5 wrap-about pb-md-5 ftco-animate">
-	          <div class="heading-section heading-section-wo-line pt-md-4 mb-5">
+	          <div class="heading-section heading-section-wo-line pt-md-4 mb-4">
 	          	<div class="ml-md-0">
-		          	<span class="subheading">Our Restaurants</span>
-		            <h2 class="mb-4">We Are Food Lover</h2>
+		          	<span class="subheading">Trải nghiệm ẩm thực 5 sao</span>
+		            <h2 class="mb-4">Deluxe Restaurant</h2>
 	            </div>
 	          </div>
 	          <div class="pb-md-4">
-							<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times.</p>
-							<p class="pl-md-5">Hệ thống tiện ích đồng bộ tiêu chuẩn 5 sao từ nhà hàng ẩm thực phong phú, hồ bơi tràn bờ đến spa thư giãn sẽ làm hài lòng mọi du khách khi dừng chân tại đây.</p>
-							<p>On her way she met a copy. The copy warned the Little Blind Text, that where it came from it would have been rewritten a thousand times and everything that was left from its origin would be the word "and" and the Little Blind Text should turn around and return to its own, safe country.</p>
+							<p>Hệ thống tiện ích đồng bộ tiêu chuẩn 5 sao từ nhà hàng ẩm thực phong phú, hồ bơi tràn bờ đến spa thư giãn sẽ làm hài lòng mọi du khách khi dừng chân tại Deluxe Resort.</p>
+							<p>Quý khách có thể lựa chọn món ăn trực tiếp từ thực đơn bên dưới để được phục vụ tại bàn nhà hàng hoặc yêu cầu nhân viên giao trực tiếp lên phòng nghỉ của mình.</p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
 
-		<section class="ftco-section">
+		<!-- PHẦN GỌI MÓN VÀ THỰC ĐƠN ĐỘNG (FEATURE 3) -->
+		<section class="ftco-section bg-light py-5">
 			<div class="container">
-				<div class="row justify-content-center mb-5 pb-3">
-          <div class="col-md-7 heading-section text-center ftco-animate">
-            <h2>Our Menu</h2>
+				<div class="row justify-content-center mb-4">
+          <div class="col-md-8 heading-section text-center">
+            <span class="subheading">Feature 3: Food Menu & Ordering</span>
+            <h2>Thực Đơn Nhà Hàng</h2>
+            <p>Chọn các món ăn yêu thích và đặt món nhanh chóng</p>
           </div>
         </div>
-				<div class="row">
-        	<div class="col-md-6">
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(../../images/menu-1.jpg);"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Bò nướng tảng kèm khoai tây</span></h3>
-	        				<span class="price">1.200.000 VNĐ</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>Chế biến từ nguồn nguyên liệu tươi ngon thượng hạng với công thức từ bếp trưởng 5 sao.</p>
-	        			</div>
-        			</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(../../images/menu-2.jpg);"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Bò nướng tảng kèm khoai tây</span></h3>
-	        				<span class="price">180.000 VNĐ</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>Chế biến từ nguồn nguyên liệu tươi ngon thượng hạng với công thức từ bếp trưởng 5 sao.</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(../../images/menu-3.jpg);"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Bò nướng tảng kèm khoai tây</span></h3>
-	        				<span class="price">1.200.000 VNĐ</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>Chế biến từ nguồn nguyên liệu tươi ngon thượng hạng với công thức từ bếp trưởng 5 sao.</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(../../images/menu-4.jpg);"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Bò nướng tảng kèm khoai tây</span></h3>
-	        				<span class="price">1.200.000 VNĐ</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>Chế biến từ nguồn nguyên liệu tươi ngon thượng hạng với công thức từ bếp trưởng 5 sao.</p>
-	        			</div>
-	        		</div>
-        		</div>
-        	</div>
 
-        	<div class="col-md-6">
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(../../images/menu-5.jpg);"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Bò nướng tảng kèm khoai tây</span></h3>
-	        				<span class="price">280.000 VNĐ</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>Chế biến từ nguồn nguyên liệu tươi ngon thượng hạng với công thức từ bếp trưởng 5 sao.</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(../../images/menu-6.jpg);"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza hải sản thập cẩm</span></h3>
-	        				<span class="price">1.200.000 VNĐ</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>Chế biến từ nguồn nguyên liệu tươi ngon thượng hạng với công thức từ bếp trưởng 5 sao.</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(../../images/menu-7.jpg);"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Bò nướng tảng kèm khoai tây</span></h3>
-	        				<span class="price">1.200.000 VNĐ</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>Chế biến từ nguồn nguyên liệu tươi ngon thượng hạng với công thức từ bếp trưởng 5 sao.</p>
-	        			</div>
-	        		</div>
-        		</div>
-        		<div class="pricing-entry d-flex ftco-animate">
-        			<div class="img" style="background-image: url(../../images/menu-8.jpg);"></div>
-        			<div class="desc pl-3">
-	        			<div class="d-flex text align-items-center">
-	        				<h3><span>Pizza dăm bông nướng dứa</span></h3>
-	        				<span class="price">1.200.000 VNĐ</span>
-	        			</div>
-	        			<div class="d-block">
-	        				<p>Chế biến từ nguồn nguyên liệu tươi ngon thượng hạng với công thức từ bếp trưởng 5 sao.</p>
-	        			</div>
-	        		</div>
-        		</div>
-        	</div>
+        <div id="customer-alert-box"></div>
+
+        <div class="row">
+          <!-- CỘT DANH SÁCH MÓN ĂN (UC15) -->
+          <div class="col-lg-8">
+            <!-- Ô TÌM KIẾM MÓN ĂN -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <div class="input-group">
+                  <input type="text" id="menu-search-input" class="form-control" placeholder="Tìm kiếm món ăn theo tên hoặc mô tả..." oninput="searchCustomerMenu()">
+                  <div class="input-group-append">
+                    <span class="input-group-text bg-white"><span class="icon-search"></span></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="dynamic-menu-list" class="row">
+              <div class="col-12 text-center text-muted py-5">Đang tải thực đơn từ hệ thống...</div>
+            </div>
+          </div>
+
+          <!-- CỘT GIỎ HÀNG GỌI MÓN (UC16) -->
+          <div class="col-lg-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 90px; z-index: 10;">
+              <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <span class="font-weight-bold"><span class="icon-shopping-cart mr-2"></span>Giỏ gọi món</span>
+                <span class="badge badge-light" id="cart-count">0 món</span>
+              </div>
+              <div class="card-body p-3">
+                <div id="cart-items-container" class="mb-3" style="max-height: 250px; overflow-y: auto;">
+                  <p class="text-muted small text-center my-3">Chưa có món nào được chọn. Hãy bấm <strong>+ Chọn món</strong> để thêm vào đơn.</p>
+                </div>
+
+                <hr class="my-2">
+                <div class="d-flex justify-content-between font-weight-bold mb-3">
+                  <span>Tổng tiền:</span>
+                  <span class="text-primary font-weight-bold" id="cart-total">0 VNĐ</span>
+                </div>
+
+                <div class="form-group mb-2">
+                  <label class="small font-weight-bold text-muted mb-1">Giao đến số phòng (nếu dùng tại bàn thì bỏ trống):</label>
+                  <input type="text" id="order-room-number" class="form-control form-control-sm" placeholder="VD: 101, 202...">
+                </div>
+
+                <div class="form-group mb-3">
+                  <label class="small font-weight-bold text-muted mb-1">Ghi chú cho bếp & phục vụ:</label>
+                  <textarea id="order-note" class="form-control form-control-sm" rows="2" placeholder="VD: ít cay, không hành, giao sau 15 phút..."></textarea>
+                </div>
+
+                <button id="btn-submit-order" class="btn btn-primary btn-block btn-sm py-2 font-weight-bold" onclick="submitFoodOrder()">
+                  Gửi yêu cầu gọi món
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- BẢNG LỊCH SỬ ĐƠN GỌI MÓN CỦA KHÁCH HÀNG (UC17, UC18) -->
+        <div class="row mt-5 pt-4 border-top">
+          <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="h4 mb-0" style="font-family: 'Playfair Display', serif;">Lịch sử gọi món của bạn</h3>
+              <button class="btn btn-sm btn-outline-secondary" onclick="loadMyOrders()"><span class="oi oi-reload mr-1"></span>Làm mới</button>
+            </div>
+            <div class="table-responsive bg-white rounded shadow-sm p-3">
+              <table class="table table-hover mb-0 align-middle">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Mã Đơn</th>
+                    <th>Thời gian gọi</th>
+                    <th>Phòng / Bàn</th>
+                    <th>Món đã đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th style="width: 140px;">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="my-orders-body">
+                  <tr><td colspan="7" class="text-center text-muted py-3">Đang tải lịch sử gọi món...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
 			</div>
 		</section>
 
-        <!-- COMPACT FOOTER -->
+    <!-- MODAL POPUP XEM CHI TIẾT ĐƠN HÀNG CỦA KHÁCH -->
+    <div class="modal fade" id="customerOrderDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-dark text-white py-2">
+            <h5 class="modal-title font-weight-bold text-white" id="custModalOrderTitle">Chi tiết đơn gọi món</h5>
+            <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body p-3" id="custModalOrderBody"></div>
+          <div class="modal-footer py-2">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
     <footer class="compact-footer">
       <div class="container">
         <div class="row align-items-center">
@@ -211,7 +207,6 @@
             <a href="rooms.html" class="mr-3">Phòng</a>
             <a href="restaurant.html" class="mr-3">Nhà hàng</a>
             <a href="about.html" class="mr-3">Giới thiệu</a>
-            
           </div>
           <div class="col-md-3 text-md-right">
             <div class="footer-social">
@@ -228,30 +223,13 @@
         </div>
       </div>
     </footer>
-    
-  
 
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-
-
-  <script src="../../js/jquery.min.js"></script>
-  <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="../../js/popper.min.js"></script>
-  <script src="../../js/bootstrap.min.js"></script>
-  <script src="../../js/jquery.easing.1.3.js"></script>
-  <script src="../../js/jquery.waypoints.min.js"></script>
-  <script src="../../js/jquery.stellar.min.js"></script>
-  <script src="../../js/owl.carousel.min.js"></script>
-  <script src="../../js/jquery.magnific-popup.min.js"></script>
-  <script src="../../js/aos.js"></script>
-  <script src="../../js/jquery.animateNumber.min.js"></script>
-  <script src="../../js/bootstrap-datepicker.js"></script>
-  <script src="../../js/jquery.timepicker.min.js"></script>
-  <script src="../../js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src="../../js/google-map.js"></script>
-  <script src="../../js/main.js"></script>  <script src="../../js/api.js"></script>
-  <script src="../../js/auth.js"></script>
-</body>
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/restaurant-food.js"></script>
+  </body>
 </html>

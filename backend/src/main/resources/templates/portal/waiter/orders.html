@@ -1,12 +1,12 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="vi">
   <head>
-    <title>Deluxe - Phục vụ - Gọi món</title>
+    <title>Deluxe - Phục vụ - Quản lý Gọi món</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="../../css/animate.css">
     <link rel="stylesheet" href="../../css/ionicons.min.css">
@@ -24,62 +24,347 @@
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
-          <li class="nav-item active"><a href="orders.html" class="nav-link">Đơn gọi món</a></li>
-          <li class="nav-item"><a href="menu.html" class="nav-link">Thực đơn</a></li>
-          <li class="nav-item"><span class="nav-link" id="user-name"></span></li>
-          <li class="nav-item"><a href="#" class="nav-link" id="btn-logout">Đăng xuất</a></li>
+            <li class="nav-item active"><a href="orders.html" class="nav-link">Đơn gọi món</a></li>
+            <li class="nav-item"><a href="menu.html" class="nav-link">Thực đơn</a></li>
+            <li class="nav-item"><span class="nav-link" id="user-name"></span></li>
+            <li class="nav-item"><a href="#" class="nav-link" id="btn-logout">Đăng xuất</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 300px;">
+    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 260px;">
       <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
           <div class="col-md-9 text-center d-flex align-items-end justify-content-center">
             <div class="text">
-              <p class="breadcrumbs mb-2"><span>Phục vụ</span></p>
-              <h1 class="mb-4 bread">Đơn gọi món</h1>
+              <p class="breadcrumbs mb-2"><span>Phục vụ (Feature 3)</span></p>
+              <h1 class="mb-4 bread">Xử lý Đơn gọi món</h1>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <section class="ftco-section bg-light">
+    <section class="ftco-section bg-light py-4">
       <div class="container">
-        <p class="mb-4">Xác nhận đơn món, theo dõi chế biến và phục vụ khách</p>
-      <div class="row">
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">3</h3><p class="mb-0">Đơn gọi món mới</p></div></div>
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">2</h3><p class="mb-0">Đang chuẩn bị món</p></div></div>
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">1</h3><p class="mb-0">Đang phục vụ</p></div></div>
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">21</h3><p class="mb-0">Hoàn thành hôm nay</p></div></div>
-      </div>
-      <div class="table-responsive bg-white p-3">
-        <table class="table table-hover mb-0">
-          <thead>
-          <tr>
-            <th>Order</th>
-            <th>Phòng</th>
-            <th>Món ăn</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr><td>O-101</td><td>201</td><td>2x Pho bo, 1x Nuoc cam</td><td>Moi</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Xác nhận</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Dang chuan bi</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Dang phuc vu</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Hoan thanh</button></td></tr>
-          <tr><td>O-102</td><td>102</td><td>1x Com chien</td><td>Dang chuan bi</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Xác nhận</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Dang chuan bi</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Dang phuc vu</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Hoan thanh</button></td></tr>
-          <tr><td>O-103</td><td>305</td><td>1x Lau</td><td>Dang phuc vu</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Xác nhận</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Dang chuan bi</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Dang phuc vu</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Hoan thanh</button></td></tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <p class="mb-0 text-muted">Xác nhận đơn món, theo dõi quy trình chế biến và giao món cho khách</p>
+          <button class="btn btn-outline-primary btn-sm" onclick="loadOrders()"><span class="oi oi-reload mr-1"></span>Làm mới</button>
+        </div>
+
+        <div id="alert-box"></div>
+
+        <!-- 4 CARD THỐNG KÊ TIẾN ĐỘ -->
+        <div class="row">
+          <div class="col-md-3 mb-3">
+            <div class="bg-white p-3 text-center shadow-sm rounded border-top border-warning" style="border-top-width: 4px !important;">
+              <h3 class="mb-1 text-warning font-weight-bold" id="stat-new">0</h3>
+              <p class="mb-0 text-muted small">Đơn mới chờ duyệt</p>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="bg-white p-3 text-center shadow-sm rounded border-top border-info" style="border-top-width: 4px !important;">
+              <h3 class="mb-1 text-info font-weight-bold" id="stat-prep">0</h3>
+              <p class="mb-0 text-muted small">Đang chế biến / Xác nhận</p>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="bg-white p-3 text-center shadow-sm rounded border-top border-primary" style="border-top-width: 4px !important;">
+              <h3 class="mb-1 text-primary font-weight-bold" id="stat-serv">0</h3>
+              <p class="mb-0 text-muted small">Đang phục vụ / Giao</p>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="bg-white p-3 text-center shadow-sm rounded border-top border-success" style="border-top-width: 4px !important;">
+              <h3 class="mb-1 text-success font-weight-bold" id="stat-done">0</h3>
+              <p class="mb-0 text-muted small">Đã hoàn thành</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- BỘ LỌC TABS & TÌM KIẾM ĐƠN HÀNG -->
+        <div class="bg-white p-3 mb-3 rounded shadow-sm">
+          <div class="row align-items-center">
+            <div class="col-md-7 mb-2 mb-md-0">
+              <div class="btn-group btn-group-sm flex-wrap" role="group" id="filter-tabs">
+                <button type="button" class="btn btn-primary active" onclick="setFilter('ALL', this)">Tất cả (<span id="tab-cnt-all">0</span>)</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="setFilter('NEW', this)">Chờ duyệt (<span id="tab-cnt-new">0</span>)</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="setFilter('PREPARING', this)">Đang nấu / Duyệt (<span id="tab-cnt-prep">0</span>)</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="setFilter('SERVING', this)">Đang phục vụ (<span id="tab-cnt-serv">0</span>)</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="setFilter('COMPLETED', this)">Hoàn thành (<span id="tab-cnt-done">0</span>)</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="setFilter('CANCELLED', this)">Đã hủy (<span id="tab-cnt-cancel">0</span>)</button>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="input-group input-group-sm">
+                <input type="text" id="order-search-input" class="form-control" placeholder="Tìm theo mã đơn, số phòng, tên khách..." oninput="filterOrders()">
+                <div class="input-group-append">
+                  <span class="input-group-text bg-white"><span class="icon-search"></span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BẢNG DANH SÁCH ĐƠN HÀNG -->
+        <div class="table-responsive bg-white p-3 shadow-sm rounded">
+          <table class="table table-hover mb-0 align-middle">
+            <thead class="thead-light">
+              <tr>
+                <th style="width: 80px;">Mã Đơn</th>
+                <th>Phòng / Bàn</th>
+                <th>Khách hàng</th>
+                <th>Món ăn</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th style="width: 260px;">Thao tác xử lý</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <tr><td colspan="7" class="text-center text-muted py-4">Đang tải danh sách đơn gọi món...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
+    <!-- MODAL POPUP XEM CHI TIẾT ĐƠN HÀNG CỦA WAITER -->
+    <div class="modal fade" id="waiterOrderDetailModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-dark text-white py-2">
+            <h5 class="modal-title font-weight-bold text-white" id="waiterModalOrderTitle">Chi tiết đơn hàng</h5>
+            <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body p-3" id="waiterModalOrderBody"></div>
+          <div class="modal-footer py-2">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/staff-common.js"></script>
+    <script>
+      let allOrdersCache = [];
+      let currentFilterStatus = 'ALL';
+
+      function formatMoney(num) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num || 0);
+      }
+
+      function showAlert(msg, isSuccess = true) {
+        const box = document.getElementById('alert-box');
+        box.innerHTML = `
+          <div class="alert alert-${isSuccess ? 'success' : 'danger'} alert-dismissible fade show shadow-sm" role="alert">
+            ${msg}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+          </div>
+        `;
+        setTimeout(() => box.innerHTML = '', 4000);
+      }
+
+      const STATUS_BADGE = {
+        NEW: '<span class="badge badge-warning px-2 py-1 text-dark">Chờ duyệt</span>',
+        CONFIRMED: '<span class="badge badge-info px-2 py-1">Đã xác nhận</span>',
+        PREPARING: '<span class="badge badge-secondary px-2 py-1">Đang nấu món</span>',
+        SERVING: '<span class="badge badge-primary px-2 py-1">Đang phục vụ</span>',
+        COMPLETED: '<span class="badge badge-success px-2 py-1">Hoàn thành</span>',
+        CANCELLED: '<span class="badge badge-danger px-2 py-1">Đã hủy</span>'
+      };
+
+      async function loadOrders() {
+        const tbody = document.getElementById('orders-table-body');
+        try {
+          const orders = await apiFetch('/orders/waiter');
+          allOrdersCache = orders || [];
+          updateStats(allOrdersCache);
+          filterOrders();
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger py-4">Lỗi tải danh sách: ${err.message}</td></tr>`;
+        }
+      }
+
+      function updateStats(orders) {
+        let nNew = 0, nPrep = 0, nServ = 0, nDone = 0, nCancel = 0;
+        orders.forEach(o => {
+          if (o.status === 'NEW') nNew++;
+          else if (o.status === 'CONFIRMED' || o.status === 'PREPARING') nPrep++;
+          else if (o.status === 'SERVING') nServ++;
+          else if (o.status === 'COMPLETED') nDone++;
+          else if (o.status === 'CANCELLED') nCancel++;
+        });
+
+        // 4 thẻ trên đầu
+        document.getElementById('stat-new').textContent = nNew;
+        document.getElementById('stat-prep').textContent = nPrep;
+        document.getElementById('stat-serv').textContent = nServ;
+        document.getElementById('stat-done').textContent = nDone;
+
+        // Số liệu trên các tab
+        document.getElementById('tab-cnt-all').textContent = orders.length;
+        document.getElementById('tab-cnt-new').textContent = nNew;
+        document.getElementById('tab-cnt-prep').textContent = nPrep;
+        document.getElementById('tab-cnt-serv').textContent = nServ;
+        document.getElementById('tab-cnt-done').textContent = nDone;
+        document.getElementById('tab-cnt-cancel').textContent = nCancel;
+      }
+
+      function setFilter(status, btn) {
+        currentFilterStatus = status;
+        const container = document.getElementById('filter-tabs');
+        container.querySelectorAll('button').forEach(b => {
+          b.classList.remove('btn-primary', 'active');
+          b.classList.add('btn-outline-secondary');
+        });
+        btn.classList.remove('btn-outline-secondary');
+        btn.classList.add('btn-primary', 'active');
+        filterOrders();
+      }
+
+      function filterOrders() {
+        const q = (document.getElementById('order-search-input')?.value || '').trim().toLowerCase();
+        let filtered = allOrdersCache;
+
+        // 1. Lọc theo trạng thái Tab
+        if (currentFilterStatus === 'NEW') {
+          filtered = filtered.filter(o => o.status === 'NEW');
+        } else if (currentFilterStatus === 'PREPARING') {
+          filtered = filtered.filter(o => o.status === 'CONFIRMED' || o.status === 'PREPARING');
+        } else if (currentFilterStatus === 'SERVING') {
+          filtered = filtered.filter(o => o.status === 'SERVING');
+        } else if (currentFilterStatus === 'COMPLETED') {
+          filtered = filtered.filter(o => o.status === 'COMPLETED');
+        } else if (currentFilterStatus === 'CANCELLED') {
+          filtered = filtered.filter(o => o.status === 'CANCELLED');
+        }
+
+        // 2. Lọc theo từ khóa tìm kiếm
+        if (q) {
+          filtered = filtered.filter(o => {
+            const orderIdStr = ('#o-' + o.id + ' o-' + o.id + ' ' + o.id).toLowerCase();
+            const roomStr = (o.roomNumber || '').toLowerCase();
+            const custStr = (o.customerName || '').toLowerCase();
+            const itemsStr = (o.items || []).map(i => i.menuItemName).join(' ').toLowerCase();
+            return orderIdStr.includes(q) || roomStr.includes(q) || custStr.includes(q) || itemsStr.includes(q);
+          });
+        }
+
+        renderOrdersTable(filtered);
+      }
+
+      function renderOrdersTable(orders) {
+        const tbody = document.getElementById('orders-table-body');
+        if (!orders || orders.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">Không có đơn gọi món nào phù hợp bộ lọc.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = orders.map(o => {
+          const itemsText = (o.items || []).map(i => `<div>&bull; <strong>${i.quantity}x</strong> ${i.menuItemName}</div>`).join('');
+          const noteText = o.note ? `<div class="small text-danger mt-1"><em>Ghi chú: ${o.note}</em></div>` : '';
+
+          let actionsHtml = '';
+          if (o.status === 'NEW') {
+            actionsHtml = `
+              <button class="btn btn-sm btn-primary mr-1 mb-1" onclick="confirmOrder(${o.id})">Xác nhận</button>
+              <button class="btn btn-sm btn-outline-danger mr-1 mb-1" onclick="updateStatus(${o.id}, 'CANCELLED')">Hủy</button>
+            `;
+          } else if (o.status === 'CONFIRMED') {
+            actionsHtml = `
+              <button class="btn btn-sm btn-info mr-1 mb-1" onclick="updateStatus(${o.id}, 'PREPARING')">Bếp nấu món</button>
+            `;
+          } else if (o.status === 'PREPARING') {
+            actionsHtml = `
+              <button class="btn btn-sm btn-warning mr-1 mb-1 text-dark font-weight-bold" onclick="updateStatus(${o.id}, 'SERVING')">Giao món</button>
+            `;
+          } else if (o.status === 'SERVING') {
+            actionsHtml = `
+              <button class="btn btn-sm btn-success mr-1 mb-1" onclick="updateStatus(${o.id}, 'COMPLETED')">Hoàn thành</button>
+            `;
+          }
+
+          actionsHtml += `<button class="btn btn-sm btn-outline-info mb-1" onclick="showWaiterOrderDetail(${o.id})">Chi tiết</button>`;
+
+          return `
+            <tr>
+              <td><strong>#O-${o.id}</strong></td>
+              <td><span class="badge badge-light border font-weight-bold">${o.roomNumber || 'Tại bàn'}</span></td>
+              <td><span class="font-weight-bold text-dark">${o.customerName}</span></td>
+              <td class="small">${itemsText}${noteText}</td>
+              <td class="text-primary font-weight-bold">${formatMoney(o.totalAmount)}</td>
+              <td>${STATUS_BADGE[o.status] || o.status}</td>
+              <td>${actionsHtml}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      function showWaiterOrderDetail(orderId) {
+        const o = allOrdersCache.find(x => x.id === orderId);
+        if (!o) return;
+
+        document.getElementById('waiterModalOrderTitle').textContent = `Chi tiết đơn gọi món #O-${o.id}`;
+        const itemsHtml = (o.items || []).map(i => `
+          <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+            <div>
+              <span class="font-weight-bold">${i.menuItemName}</span>
+              <div class="small text-muted">${formatMoney(i.price)} &times; ${i.quantity} ${i.note ? `(Ghi chú: ${i.note})` : ''}</div>
+            </div>
+            <span class="font-weight-bold text-dark">${formatMoney(i.subTotal)}</span>
+          </div>
+        `).join('');
+
+        document.getElementById('waiterModalOrderBody').innerHTML = `
+          <div class="mb-3">
+            <p class="mb-1"><strong>Khách hàng:</strong> ${o.customerName}</p>
+            <p class="mb-1"><strong>Phòng / Bàn:</strong> ${o.roomNumber || 'Tại bàn nhà hàng'}</p>
+            <p class="mb-1"><strong>Thời gian gọi:</strong> ${new Date(o.createdAt).toLocaleString('vi-VN')}</p>
+            <p class="mb-1"><strong>Trạng thái:</strong> ${STATUS_BADGE[o.status] || o.status}</p>
+            ${o.note ? `<p class="mb-1 text-danger"><strong>Ghi chú từ khách:</strong> ${o.note}</p>` : ''}
+          </div>
+          <h6 class="font-weight-bold border-bottom pb-2">Danh sách món ăn:</h6>
+          <div class="mb-3">${itemsHtml}</div>
+          <div class="d-flex justify-content-between align-items-center font-weight-bold h5 text-primary">
+            <span>Tổng tiền đơn:</span>
+            <span>${formatMoney(o.totalAmount)}</span>
+          </div>
+        `;
+
+        $('#waiterOrderDetailModal').modal('show');
+      }
+
+      async function confirmOrder(id) {
+        try {
+          await apiFetch(`/orders/${id}/confirm`, { method: 'PUT' });
+          showAlert(`Đã xác nhận đơn hàng #O-${id}`);
+          loadOrders();
+        } catch (err) {
+          showAlert('Lỗi: ' + err.message, false);
+        }
+      }
+
+      async function updateStatus(id, newStatus) {
+        try {
+          await apiFetch(`/orders/${id}/status`, {
+            method: 'PUT',
+            body: JSON.stringify({ status: newStatus })
+          });
+          showAlert(`Đã chuyển trạng thái đơn #O-${id} sang ${newStatus}`);
+          loadOrders();
+        } catch (err) {
+          showAlert('Lỗi: ' + err.message, false);
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', loadOrders);
+    </script>
   </body>
 </html>
-

@@ -1,12 +1,12 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="vi">
   <head>
     <title>Deluxe - Phục vụ - Thực đơn</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="../../css/animate.css">
     <link rel="stylesheet" href="../../css/ionicons.min.css">
@@ -24,55 +24,121 @@
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav">
           <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="orders.html" class="nav-link">Đơn gọi món</a></li>
-          <li class="nav-item active"><a href="menu.html" class="nav-link">Thực đơn</a></li>
-          <li class="nav-item"><span class="nav-link" id="user-name"></span></li>
-          <li class="nav-item"><a href="#" class="nav-link" id="btn-logout">Đăng xuất</a></li>
+            <li class="nav-item"><a href="orders.html" class="nav-link">Đơn gọi món</a></li>
+            <li class="nav-item active"><a href="menu.html" class="nav-link">Thực đơn</a></li>
+            <li class="nav-item"><span class="nav-link" id="user-name"></span></li>
+            <li class="nav-item"><a href="#" class="nav-link" id="btn-logout">Đăng xuất</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 300px;">
+    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 260px;">
       <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
           <div class="col-md-9 text-center d-flex align-items-end justify-content-center">
             <div class="text">
-              <p class="breadcrumbs mb-2"><span>Phục vụ</span></p>
-              <h1 class="mb-4 bread">Menu</h1>
+              <p class="breadcrumbs mb-2"><span>Phục vụ (Feature 3)</span></p>
+              <h1 class="mb-4 bread">Quản lý Thực đơn</h1>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <section class="ftco-section bg-light">
+    <section class="ftco-section bg-light py-4">
       <div class="container">
-        <p class="mb-4">Xác nhận đơn món, theo dõi chế biến và phục vụ khách</p>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <p class="mb-0 text-muted">Xem thực đơn món ăn và bật/tắt tình trạng còn món/hết món</p>
+          <button class="btn btn-outline-primary btn-sm" onclick="loadMenu()"><span class="oi oi-reload mr-1"></span>Làm mới</button>
+        </div>
 
-      <div class="table-responsive bg-white p-3">
-        <table class="table table-hover mb-0">
-          <thead>
-          <tr>
-            <th>Món ăn</th>
-            <th>Giá</th>
-            <th>Tinh trang</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr><td>Pho bo</td><td>90.000</td><td>Con</td></tr>
-          <tr><td>Com chien</td><td>75.000</td><td>Con</td></tr>
-          <tr><td>Lau</td><td>350.000</td><td>Het</td></tr>
-          </tbody>
-        </table>
-      </div>
+        <div id="alert-box"></div>
+
+        <div class="table-responsive bg-white p-3 shadow-sm rounded">
+          <table class="table table-hover mb-0 align-middle">
+            <thead class="thead-light">
+              <tr>
+                <th style="width: 60px;">ID</th>
+                <th>Tên món ăn</th>
+                <th>Mô tả</th>
+                <th>Đơn giá</th>
+                <th style="width: 140px;">Tình trạng</th>
+                <th style="width: 160px;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="menu-table-body">
+              <tr><td colspan="6" class="text-center text-muted py-4">Đang tải danh sách món ăn...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
     <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/staff-common.js"></script>
+    <script>
+      function formatMoney(num) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num || 0);
+      }
+
+      function showAlert(msg, isSuccess = true) {
+        const box = document.getElementById('alert-box');
+        box.innerHTML = `
+          <div class="alert alert-${isSuccess ? 'success' : 'danger'} alert-dismissible fade show" role="alert">
+            ${msg}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+          </div>
+        `;
+        setTimeout(() => box.innerHTML = '', 4000);
+      }
+
+      async function loadMenu() {
+        const tbody = document.getElementById('menu-table-body');
+        try {
+          const list = await apiFetch('/menu/all');
+          if (!list || list.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">Chưa có món ăn nào trong thực đơn.</td></tr>';
+            return;
+          }
+          tbody.innerHTML = list.map(item => `
+            <tr>
+              <td><strong>#${item.id}</strong></td>
+              <td class="font-weight-bold text-dark">${item.name}</td>
+              <td class="text-muted small">${item.description || '-'}</td>
+              <td class="text-primary font-weight-bold">${formatMoney(item.price)}</td>
+              <td>
+                ${item.available 
+                  ? '<span class="badge badge-success px-2 py-1">Còn phục vụ</span>' 
+                  : '<span class="badge badge-secondary px-2 py-1">Tạm hết món</span>'}
+              </td>
+              <td>
+                <button class="btn btn-sm ${item.available ? 'btn-outline-danger' : 'btn-outline-success'}" 
+                        onclick="toggleAvailability(${item.id})">
+                  ${item.available ? 'Đánh dấu HẾT' : 'Đánh dấu CÒN'}
+                </button>
+              </td>
+            </tr>
+          `).join('');
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">Lỗi tải thực đơn: ${err.message}</td></tr>`;
+        }
+      }
+
+      async function toggleAvailability(id) {
+        try {
+          await apiFetch(`/menu/${id}/toggle`, { method: 'PUT' });
+          showAlert('Đã cập nhật trạng thái món ăn thành công!');
+          loadMenu();
+        } catch (err) {
+          showAlert('Không thể cập nhật: ' + err.message, false);
+        }
+      }
+
+      // Tự động load khi trang sẵn sàng
+      document.addEventListener('DOMContentLoaded', loadMenu);
+    </script>
   </body>
 </html>
-

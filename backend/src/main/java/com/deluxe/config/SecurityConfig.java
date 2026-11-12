@@ -73,6 +73,7 @@ public class SecurityConfig {
                 // 3. Trang Dang nhap & Dang ky (portal/auth) va API auth
                 .requestMatchers("/portal/auth/**").permitAll()
                 .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/logout").permitAll()
+                .requestMatchers("/api/menu", "/api/menu/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
 
                 // 4. Bao ve cac thu muc chuc nang sau trong portal/ va api tuong ung theo Role
