@@ -5,6 +5,7 @@ let staffList = [];
 let roomsList = [];
 let allRoomsData = [];
 let isMyTasksOnly = false;
+let editingOriginalStatus = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
@@ -119,7 +120,7 @@ function populateStaffDropdowns() {
 
   selects.forEach(select => {
     if (select) {
-      select.innerHTML = '<option value="">-- Chọn nhân viên buồng phòng --</option>';
+      select.innerHTML = '<option value="">-- Chưa phân công (buồng phòng tự nhận) --</option>';
       staffList.forEach(s => {
         select.innerHTML += `<option value="${s.id}">${escapeHtml(s.fullName || s.username)}</option>`;
       });
@@ -280,11 +281,11 @@ function renderTable(rooms, highlightRoomId = null) {
     const statusBadge = formatRoomStatusBadge(item.roomStatus, item.cleaningStatus);
     const statusText = getStatusText(item.roomStatus, item.cleaningStatus);
 
-    // 5. Người dọn (Buồng Phòng, Tên nhân viên hoặc Chưa phân công)
-    const staffName = item.assignedToName || 'Buồng Phòng';
+    // 5. Người dọn (Tên nhân viên hoặc Chưa phân công)
+    const staffName = item.assignedToName || 'Chưa phân công';
 
     // 6. Thao tác: Phân quyền rõ ràng
-    // - Buồng phòng (ROLE_HOUSEKEEPING): CHỈ xem danh sách và thao tác NHẬN NHIỆM VỤ / HOÀN THÀNH
+    // - Buồng phòng (ROLE_HOUSEKEEPING): CHỈ xem danh sách và thao tác NHẬN NHIỆM VỤ / DỌN XONG
     // - Lễ tân / Quản trị viên: Nút Sửa (chỉnh sửa phân công, tiến độ, xóa)
     let actionsHtml = '';
     const isHousekeeping = currentUser && currentUser.role === 'ROLE_HOUSEKEEPING';
@@ -310,11 +311,11 @@ function renderTable(rooms, highlightRoomId = null) {
                   data-room-id="${item.roomId || ''}" 
                   data-room-number="${escapeHtml(roomNumber)}"
                   title="Xác nhận đã dọn dẹp xong">
-            <i class="oi oi-circle-check mr-1"></i>Hoàn thành
+            <i class="oi oi-circle-check mr-1"></i>Dọn xong
           </button>
         `;
       } else if (item.cleaningStatus === 'DONE') {
-        actionsHtml = `<span class="badge badge-success p-2 font-weight-500">Đã xong</span>`;
+        actionsHtml = `<span class="badge badge-success p-2 font-weight-500">Dọn xong</span>`;
       } else {
         actionsHtml = `<span class="text-muted small">--</span>`;
       }
@@ -375,9 +376,10 @@ function formatDateTime(dateStr) {
 function getStatusText(roomStatus, cleaningStatus) {
   if (roomStatus === 'MAINTENANCE') return 'Đang bảo trì';
   if (cleaningStatus === 'IN_PROGRESS') return 'Đang dọn';
-  if (cleaningStatus === 'PENDING') return 'Chờ nhận việc';
-  if (cleaningStatus === 'DONE' || roomStatus === 'READY' || roomStatus === 'AVAILABLE') return 'Sẵn sàng';
-  if (roomStatus === 'CLEANING') return 'Chờ nhận việc';
+  if (cleaningStatus === 'PENDING') return 'Chờ dọn';
+  if (cleaningStatus === 'DONE') return 'Dọn xong';
+  if (roomStatus === 'READY' || roomStatus === 'AVAILABLE') return 'Sẵn sàng';
+  if (roomStatus === 'CLEANING') return 'Chờ dọn';
   if (roomStatus === 'OCCUPIED') return 'Đang có khách';
   if (roomStatus === 'BOOKED') return 'Đã đặt trước';
   return roomStatus || 'Chưa rõ';
@@ -392,13 +394,16 @@ function formatRoomStatusBadge(roomStatus, cleaningStatus) {
     return `<span class="badge badge-warning p-2 font-weight-500 text-dark" style="background-color:#fef3c7; border:1px solid #fde68a; color:#92400e;">Đang dọn</span>`;
   }
   if (cleaningStatus === 'PENDING') {
-    return `<span class="badge badge-info p-2 font-weight-500" style="background-color:#eff6ff; border:1px solid #dbeafe; color:#1e40af;">Chờ nhận việc</span>`;
+    return `<span class="badge badge-info p-2 font-weight-500" style="background-color:#eff6ff; border:1px solid #dbeafe; color:#1e40af;">Chờ dọn</span>`;
   }
-  if (cleaningStatus === 'DONE' || roomStatus === 'READY' || roomStatus === 'AVAILABLE') {
+  if (cleaningStatus === 'DONE') {
+    return `<span class="badge badge-success p-2 font-weight-500" style="background-color:#dcfce7; border:1px solid #bbf7d0; color:#166534;">Dọn xong</span>`;
+  }
+  if (roomStatus === 'READY' || roomStatus === 'AVAILABLE') {
     return `<span class="badge badge-success p-2 font-weight-500" style="background-color:#dcfce7; border:1px solid #bbf7d0; color:#166534;">Sẵn sàng</span>`;
   }
   if (roomStatus === 'CLEANING') {
-    return `<span class="badge badge-info p-2 font-weight-500" style="background-color:#eff6ff; border:1px solid #dbeafe; color:#1e40af;">Chờ nhận việc</span>`;
+    return `<span class="badge badge-info p-2 font-weight-500" style="background-color:#eff6ff; border:1px solid #dbeafe; color:#1e40af;">Chờ dọn</span>`;
   }
   if (roomStatus === 'OCCUPIED') {
     return `<span class="badge badge-secondary p-2 font-weight-500">Đang có khách</span>`;
@@ -492,9 +497,10 @@ function openEditTaskModal(data) {
   if (inputRoomId) inputRoomId.value = data.roomId || '';
   if (textRoom) textRoom.textContent = data.roomNumber || '--';
   if (textStatus) textStatus.textContent = data.currentStatus || '--';
+  editingOriginalStatus = data.cleaningStatus || 'PENDING';
 
-  if (selectStaff && data.assignedTo) {
-    selectStaff.value = data.assignedTo;
+  if (selectStaff) {
+    selectStaff.value = data.assignedTo || '';
   }
   if (selectStatus && data.cleaningStatus) {
     selectStatus.value = data.cleaningStatus;
@@ -514,31 +520,26 @@ async function submitEditTask() {
   const roomNumber = document.getElementById('modal-edit-room-number')?.textContent || '';
   const btnSave = document.getElementById('btn-save-edit-task');
 
-  if (!assignedTo) {
-    alert('Vui lòng chọn nhân viên buồng phòng để phân công.');
-    return;
-  }
-
   if (btnSave) {
     btnSave.disabled = true;
     btnSave.textContent = 'Đang lưu...';
   }
 
   try {
-    // 1. Cập nhật phân công người dọn
+    // 1. Cập nhật phân công người dọn (có thể bỏ trống để chưa phân công)
     const assignRes = await apiFetch('/housekeeping/tasks/assign', {
       method: 'POST',
       body: JSON.stringify({
         roomId: parseInt(roomId),
-        assignedTo: parseInt(assignedTo)
+        assignedTo: assignedTo ? parseInt(assignedTo) : null
       })
     });
 
     const activeTaskId = taskId || assignRes.taskId || assignRes.id;
 
-    // 2. Nếu có thay đổi tiến độ dọn phòng (khác PENDING), gọi update status và hiển thị lỗi nếu vi phạm quy tắc
-    if (activeTaskId && cleaningStatus && cleaningStatus !== 'PENDING') {
-      await apiFetch(`/housekeeping/tasks/${activeTaskId}/status`, {
+    // 2. Nếu có thay đổi tiến độ dọn phòng so với ban đầu, gọi update status
+    if (activeTaskId && cleaningStatus && cleaningStatus !== editingOriginalStatus) {
+      await apiFetch(`/housekeeping/tasks/${activeTaskId}/status?roomId=${roomId || ''}`, {
         method: 'PUT',
         body: JSON.stringify({ status: cleaningStatus })
       });
@@ -624,10 +625,6 @@ async function submitCreateTask() {
     alert('Vui lòng chọn phòng cần dọn dẹp.');
     return;
   }
-  if (!assignedTo) {
-    alert('Vui lòng chọn nhân viên buồng phòng để phân công.');
-    return;
-  }
 
   if (btnSave) {
     btnSave.disabled = true;
@@ -635,11 +632,11 @@ async function submitCreateTask() {
   }
 
   try {
-    const res = await apiFetch('/housekeeping/tasks/assign', {
+    const res = await apiFetch('/housekeeping/tasks', {
       method: 'POST',
       body: JSON.stringify({
         roomId: parseInt(roomId),
-        assignedTo: parseInt(assignedTo)
+        assignedTo: assignedTo ? parseInt(assignedTo) : null
       })
     });
 
@@ -655,7 +652,7 @@ async function submitCreateTask() {
   } finally {
     if (btnSave) {
       btnSave.disabled = false;
-      btnSave.textContent = 'Tạo & Giao việc';
+      btnSave.textContent = 'Tạo nhiệm vụ';
     }
   }
 }

@@ -172,7 +172,7 @@ public class HousekeepingService {
     }
 
     /**
-     * Receptionist tao nhiem vu don phong va phan cong nhan vien
+     * Receptionist tao nhiem vu don phong (phan cong nhan vien la tuy chon, co the de trong de buong phong tu nhan)
      */
     public RoomToCleanDto createCleaningTask(CreateTaskRequest req) {
         if (req == null) {
@@ -181,15 +181,16 @@ public class HousekeepingService {
         if (req.getRoomId() == null) {
             throw new IllegalArgumentException("Vui lòng chọn phòng cần dọn dẹp");
         }
-        if (req.getAssignedTo() == null) {
-            throw new IllegalArgumentException("Vui lòng chọn nhân viên buồng phòng để phân công");
-        }
 
         Room room = roomRepository.findById(req.getRoomId())
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phòng với ID: " + req.getRoomId()));
 
-        User staff = userRepository.findById(req.getAssignedTo())
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy nhân viên với ID: " + req.getAssignedTo()));
+        Long staffId = null;
+        if (req.getAssignedTo() != null) {
+            User staff = userRepository.findById(req.getAssignedTo())
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy nhân viên với ID: " + req.getAssignedTo()));
+            staffId = staff.getId();
+        }
 
         // Tim xem phong co nhiem vu nao dang ton tai chua hoan thanh khong
         List<CleaningTask> existingTasks = cleaningTaskRepository.findByRoomId(room.getId());
@@ -200,14 +201,14 @@ public class HousekeepingService {
 
         CleaningTask savedTask;
         if (activeTask != null) {
-            activeTask.setAssignedTo(staff.getId());
+            activeTask.setAssignedTo(staffId);
             activeTask.setStatus(CleaningStatus.PENDING);
             activeTask.setCreatedAt(LocalDateTime.now());
             savedTask = cleaningTaskRepository.save(activeTask);
         } else {
             CleaningTask newTask = CleaningTask.builder()
                     .roomId(room.getId())
-                    .assignedTo(staff.getId())
+                    .assignedTo(staffId)
                     .status(CleaningStatus.PENDING)
                     .createdAt(LocalDateTime.now())
                     .build();
@@ -353,21 +354,15 @@ public class HousekeepingService {
 
         // KIEM TRA QUY TRINH:
         // - ROLE_HOUSEKEEPING bat buoc tuan tu: PENDING -> IN_PROGRESS -> DONE
-        // - Receptionist / Admin duoc phep chuyen nhanh neu can trong modal Sua
-        if (currentStatus == CleaningStatus.PENDING) {
-            if ("ROLE_HOUSEKEEPING".equals(userRole)) {
-                if (newStatus != CleaningStatus.IN_PROGRESS) {
-                    throw new IllegalStateException("Quy trình không hợp lệ: Nhiệm vụ đang ở trạng thái 'Chờ dọn', chỉ có thể chuyển sang 'Đang dọn (IN_PROGRESS)' trước khi hoàn thành.");
-                }
-            } else if (newStatus != CleaningStatus.IN_PROGRESS && newStatus != CleaningStatus.DONE) {
-                throw new IllegalStateException("Quy trình không hợp lệ: Nhiệm vụ đang ở trạng thái 'Chờ dọn', chỉ có thể chuyển sang 'Đang dọn' hoặc 'Đã hoàn thành'.");
-            }
-        } else if (currentStatus == CleaningStatus.IN_PROGRESS) {
-            if (newStatus != CleaningStatus.DONE) {
+        // - Receptionist / Admin duoc phep dieu chinh linh hoat trong modal Sua
+        if ("ROLE_HOUSEKEEPING".equals(userRole)) {
+            if (currentStatus == CleaningStatus.PENDING && newStatus != CleaningStatus.IN_PROGRESS) {
+                throw new IllegalStateException("Quy trình không hợp lệ: Nhiệm vụ đang ở trạng thái 'Chờ dọn', chỉ có thể chuyển sang 'Đang dọn (IN_PROGRESS)' trước khi hoàn thành.");
+            } else if (currentStatus == CleaningStatus.IN_PROGRESS && newStatus != CleaningStatus.DONE) {
                 throw new IllegalStateException("Quy trình không hợp lệ: Nhiệm vụ đang ở trạng thái 'Đang dọn (IN_PROGRESS)', chỉ có thể chuyển sang 'Đã dọn xong (DONE)'. Không thể quay lại trạng thái 'Chờ dọn (PENDING)'.");
+            } else if (currentStatus == CleaningStatus.DONE) {
+                throw new IllegalStateException("Quy trình không hợp lệ: Nhiệm vụ đã hoàn thành 'Đã dọn xong (DONE)', quy trình dọn dẹp đã hoàn tất và không thể thay đổi trạng thái.");
             }
-        } else if (currentStatus == CleaningStatus.DONE) {
-            throw new IllegalStateException("Quy trình không hợp lệ: Nhiệm vụ đã hoàn thành 'Đã dọn xong (DONE)', quy trình dọn dẹp đã hoàn tất và không thể thay đổi trạng thái.");
         }
 
         Room room = roomRepository.findById(task.getRoomId()).orElse(null);
@@ -387,8 +382,8 @@ public class HousekeepingService {
                     room.setStatus(RoomStatus.AVAILABLE);
                     roomRepository.save(room);
                 }
-            } else if (newStatus == CleaningStatus.IN_PROGRESS) {
-                // Khi Housekeeping bat dau don, chi cap nhat sang CLEANING neu phong dang AVAILABLE/READY
+            } else {
+                // PENDING hoac IN_PROGRESS: dong bo phong sang CLEANING neu phong dang AVAILABLE/READY
                 if (room.getStatus() == RoomStatus.AVAILABLE || room.getStatus() == RoomStatus.READY) {
                     room.setStatus(RoomStatus.CLEANING);
                     roomRepository.save(room);
@@ -414,7 +409,32 @@ public class HousekeepingService {
     }
 
     public RoomToCleanDto assignTask(AssignTaskRequest req) {
-        CreateTaskRequest createReq = new CreateTaskRequest(req.getRoomId(), req.getAssignedTo(), req.getNote());
+        if (req == null || req.getRoomId() == null) {
+            throw new IllegalArgumentException("Vui lòng chọn phòng cần dọn dẹp");
+        }
+        Room room = roomRepository.findById(req.getRoomId())
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phòng với ID: " + req.getRoomId()));
+
+        Long staffId = null;
+        if (req.getAssignedTo() != null) {
+            User staff = userRepository.findById(req.getAssignedTo())
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy nhân viên với ID: " + req.getAssignedTo()));
+            staffId = staff.getId();
+        }
+
+        List<CleaningTask> existingTasks = cleaningTaskRepository.findByRoomId(room.getId());
+        CleaningTask activeTask = existingTasks.stream()
+                .filter(t -> t.getStatus() == CleaningStatus.PENDING || t.getStatus() == CleaningStatus.IN_PROGRESS)
+                .findFirst()
+                .orElse(null);
+
+        if (activeTask != null) {
+            activeTask.setAssignedTo(staffId);
+            CleaningTask savedTask = cleaningTaskRepository.save(activeTask);
+            return toDto(savedTask, room);
+        }
+
+        CreateTaskRequest createReq = new CreateTaskRequest(req.getRoomId(), staffId, req.getNote());
         return createCleaningTask(createReq);
     }
 

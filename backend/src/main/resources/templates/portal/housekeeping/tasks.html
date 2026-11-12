@@ -104,7 +104,7 @@
               <i class="oi oi-plus mr-1"></i>Tạo nhiệm vụ dọn phòng
             </button>
             <a href="maintenance.html" class="btn btn-outline-danger btn-sm mr-2 font-weight-bold">
-              <i class="oi oi-wrench mr-1"></i>Xem sự cố bảo trì
+              <i class="oi oi-wrench mr-1"></i>Báo cáo bảo trì
             </a>
             <button class="btn btn-outline-secondary btn-sm" id="btn-refresh">
               <i class="oi oi-reload mr-1"></i>Làm mới
@@ -123,19 +123,19 @@
           <div class="col-md-3 col-sm-6 mb-3">
             <div class="bg-white p-4 text-center rounded shadow-sm kpi-card" id="card-kpi-pending">
               <h2 class="mb-1 text-warning font-weight-bold" id="kpi-pending" style="font-family:'Playfair Display',serif">0</h2>
-              <p class="mb-0 text-muted small font-weight-bold uppercase">Chờ nhận việc</p>
+              <p class="mb-0 text-muted small font-weight-bold uppercase">Chờ dọn</p>
             </div>
           </div>
           <div class="col-md-3 col-sm-6 mb-3">
             <div class="bg-white p-4 text-center rounded shadow-sm kpi-card" id="card-kpi-inprogress">
               <h2 class="mb-1 text-primary font-weight-bold" id="kpi-inprogress" style="font-family:'Playfair Display',serif">0</h2>
-              <p class="mb-0 text-muted small font-weight-bold uppercase">Đang dọn phòng</p>
+              <p class="mb-0 text-muted small font-weight-bold uppercase">Đang dọn</p>
             </div>
           </div>
           <div class="col-md-3 col-sm-6 mb-3">
             <div class="bg-white p-4 text-center rounded shadow-sm kpi-card" id="card-kpi-done">
               <h2 class="mb-1 text-success font-weight-bold" id="kpi-done" style="font-family:'Playfair Display',serif">0</h2>
-              <p class="mb-0 text-muted small font-weight-bold uppercase">Đã hoàn thành</p>
+              <p class="mb-0 text-muted small font-weight-bold uppercase">Dọn xong</p>
             </div>
           </div>
         </div>
@@ -159,10 +159,10 @@
               <div class="col-md-4 col-sm-6 mb-2 mb-md-0">
                 <label class="small font-weight-bold text-muted mb-1">Lọc theo tiến độ dọn dẹp:</label>
                 <select class="form-control" id="filter-status">
-                  <option value="ALL_ACTIVE" selected>Phòng cần dọn (Chờ nhận &amp; Đang dọn)</option>
-                  <option value="PENDING">Chờ nhận việc</option>
-                  <option value="IN_PROGRESS">Đang dọn phòng</option>
-                  <option value="DONE">Đã hoàn thành</option>
+                  <option value="ALL_ACTIVE" selected>Phòng cần dọn (Chờ dọn &amp; Đang dọn)</option>
+                  <option value="PENDING">Chờ dọn</option>
+                  <option value="IN_PROGRESS">Đang dọn</option>
+                  <option value="DONE">Dọn xong</option>
                   <option value="ALL">Tất cả tiến độ</option>
                 </select>
               </div>
@@ -251,18 +251,18 @@
 
             <div class="form-group mb-3">
               <label class="font-weight-bold" for="modal-create-staff">
-                2. Chọn nhân viên buồng phòng để phân công: <span class="text-danger">*</span>
+                2. Phân công nhân viên buồng phòng <span class="text-muted small font-weight-normal">(tùy chọn)</span>:
               </label>
               <select class="form-control custom-select" id="modal-create-staff">
-                <option value="">-- Đang nạp danh sách nhân viên --</option>
+                <option value="">-- Chưa phân công (buồng phòng tự nhận) --</option>
               </select>
-              <small class="form-text text-muted">Nhân viên này sẽ xem và thực hiện nhiệm vụ khi đăng nhập.</small>
+              <small class="form-text text-muted">Có thể để trống để nhân viên buồng phòng chủ động nhận nhiệm vụ trên danh sách.</small>
             </div>
           </div>
           <div class="modal-footer bg-light">
             <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Hủy bỏ</button>
             <button type="button" class="btn btn-primary btn-sm font-weight-bold px-3" id="btn-save-create-task">
-              <i class="oi oi-check mr-1"></i>Tạo &amp; Giao việc
+              <i class="oi oi-check mr-1"></i>Tạo nhiệm vụ
             </button>
           </div>
         </div>
@@ -298,10 +298,10 @@
 
             <div class="form-group mb-3">
               <label class="font-weight-bold" for="modal-edit-staff">
-                Phân công người dọn: <span class="text-danger">*</span>
+                Phân công người dọn:
               </label>
               <select class="form-control custom-select" id="modal-edit-staff">
-                <option value="">-- Đang nạp danh sách nhân viên --</option>
+                <option value="">-- Chưa phân công (buồng phòng tự nhận) --</option>
               </select>
             </div>
 
@@ -310,9 +310,9 @@
                 Tiến độ dọn phòng:
               </label>
               <select class="form-control custom-select" id="modal-edit-cleaning-status">
-                <option value="PENDING">Chờ nhận việc</option>
+                <option value="PENDING">Chờ dọn</option>
                 <option value="IN_PROGRESS">Đang dọn</option>
-                <option value="DONE">Đã hoàn thành</option>
+                <option value="DONE">Dọn xong</option>
               </select>
             </div>
           </div>
