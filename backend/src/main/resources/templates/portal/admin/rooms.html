@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Deluxe - Quản trị - Phòng nghỉ</title>
@@ -51,32 +51,183 @@
 
     <section class="ftco-section bg-light">
       <div class="container">
-        <p class="mb-4">Quản lý và thống kê toàn hệ thống</p>
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+          <div>
+            <h3 class="mb-1" style="font-family:'Playfair Display',serif">Quản lý Phòng &amp; Hạng phòng</h3>
+            <p class="mb-0 text-muted">Cấu hình danh sách phòng, loại phòng và giá phòng nghỉ (CRUD Rooms &amp; RoomTypes)</p>
+          </div>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-sm btn-primary adm-room-tab" data-tab="ROOMS">Danh sách Phòng</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary adm-room-tab" data-tab="TYPES">Hạng phòng &amp; Giá</button>
+          </div>
+        </div>
 
-      <div class="table-responsive bg-white p-3">
-        <table class="table table-hover mb-0">
-          <thead>
-          <tr>
-            <th>Phòng</th>
-            <th>Hạng phòng</th>
-            <th>Đơn giá / đêm</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr><td>101</td><td>Deluxe</td><td>1.500.000</td><td>Đang ở</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Sửa</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Xóa</button></td></tr>
-          <tr><td>102</td><td>Standard</td><td>900.000</td><td>Phòng trống</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Sửa</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Xóa</button></td></tr>
-          <tr><td>201</td><td>Suite</td><td>2.800.000</td><td>Đang dọn</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Sửa</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Xóa</button></td></tr>
-          </tbody>
-        </table>
-      </div>
+        <div id="admin-rooms-alert" class="alert d-none" role="alert"></div>
+
+        <!-- Panel 1: Quản lý Phòng -->
+        <div id="adm-panel-rooms">
+          <div class="bg-white p-3 mb-3 rounded shadow-sm d-flex flex-wrap justify-content-between align-items-end">
+            <div class="d-flex flex-wrap align-items-end">
+              <div class="mr-3 mb-2 mb-md-0">
+                <label for="adm-filter-type" class="small font-weight-bold text-muted mb-1">Hạng phòng</label>
+                <select id="adm-filter-type" class="form-control form-control-sm">
+                  <option value="">Tất cả hạng phòng</option>
+                </select>
+              </div>
+              <div class="mb-2 mb-md-0">
+                <label for="adm-filter-status" class="small font-weight-bold text-muted mb-1">Trạng thái</label>
+                <select id="adm-filter-status" class="form-control form-control-sm">
+                  <option value="">Tất cả trạng thái</option>
+                  <option value="AVAILABLE">Còn trống (AVAILABLE)</option>
+                  <option value="BOOKED">Đã đặt (BOOKED)</option>
+                  <option value="OCCUPIED">Đang có khách (OCCUPIED)</option>
+                  <option value="CLEANING">Đang dọn dẹp (CLEANING)</option>
+                  <option value="MAINTENANCE">Bảo trì (MAINTENANCE)</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" id="btn-open-add-room" class="btn btn-primary btn-sm px-3">+ Thêm phòng mới</button>
+          </div>
+
+          <div class="table-responsive bg-white p-3 rounded shadow-sm">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Phòng</th>
+                  <th>Hạng phòng</th>
+                  <th>Đơn giá / đêm</th>
+                  <th>Sức chứa</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="admin-rooms-tbody">
+                <tr><td colspan="6" class="text-center py-4 text-muted">Đang tải danh sách phòng...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Panel 2: Quản lý Hạng phòng -->
+        <div id="adm-panel-types" class="d-none">
+          <div class="bg-white p-3 mb-3 rounded shadow-sm d-flex justify-content-between align-items-center">
+            <span class="small text-muted">Quản lý hạng phòng, giá niêm yết mỗi đêm và sức chứa tối đa</span>
+            <button type="button" id="btn-open-add-type" class="btn btn-primary btn-sm px-3">+ Thêm hạng phòng</button>
+          </div>
+
+          <div class="table-responsive bg-white p-3 rounded shadow-sm">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Mã</th>
+                  <th>Tên hạng phòng</th>
+                  <th>Đơn giá / đêm</th>
+                  <th>Sức chứa</th>
+                  <th>Mô tả</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="admin-roomtypes-tbody">
+                <tr><td colspan="6" class="text-center py-4 text-muted">Đang tải danh sách hạng phòng...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
 
+    <!-- Modal Thêm/Sửa Phòng -->
+    <div class="modal fade" id="adminRoomModal" tabindex="-1" role="dialog" aria-labelledby="adminRoomModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <form id="admin-room-form">
+            <div class="modal-header bg-dark text-white">
+              <h5 class="modal-title text-white" id="adminRoomModalTitle">Thêm Phòng Mới</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Đóng">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="admin-room-modal-alert" class="alert d-none" role="alert"></div>
+              <input type="hidden" id="adm-rm-id">
+              <div class="form-group">
+                <label for="adm-rm-number" class="small font-weight-bold">Số phòng</label>
+                <input type="text" id="adm-rm-number" class="form-control" placeholder="Ví dụ: 101, 205..." required>
+              </div>
+              <div class="form-group">
+                <label for="adm-rm-type" class="small font-weight-bold">Hạng phòng</label>
+                <select id="adm-rm-type" class="form-control" required></select>
+              </div>
+              <div class="form-group mb-0">
+                <label for="adm-rm-status" class="small font-weight-bold">Trạng thái</label>
+                <select id="adm-rm-status" class="form-control" required>
+                  <option value="AVAILABLE">Còn trống (AVAILABLE)</option>
+                  <option value="BOOKED">Đã đặt (BOOKED)</option>
+                  <option value="OCCUPIED">Đang có khách (OCCUPIED)</option>
+                  <option value="CLEANING">Đang dọn dẹp (CLEANING)</option>
+                  <option value="MAINTENANCE">Bảo trì (MAINTENANCE)</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+              <button type="submit" class="btn btn-primary">Lưu phòng</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Thêm/Sửa Hạng phòng -->
+    <div class="modal fade" id="adminTypeModal" tabindex="-1" role="dialog" aria-labelledby="adminTypeModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <form id="admin-type-form">
+            <div class="modal-header bg-dark text-white">
+              <h5 class="modal-title text-white" id="adminTypeModalTitle">Thêm Hạng Phòng Mới</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Đóng">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div id="admin-type-modal-alert" class="alert d-none" role="alert"></div>
+              <input type="hidden" id="adm-rt-id">
+              <div class="form-group">
+                <label for="adm-rt-name" class="small font-weight-bold">Tên hạng phòng</label>
+                <input type="text" id="adm-rt-name" class="form-control" placeholder="Ví dụ: Standard, Deluxe, Suite..." required>
+              </div>
+              <div class="row">
+                <div class="col-md-6 form-group">
+                  <label for="adm-rt-price" class="small font-weight-bold">Đơn giá / đêm (VNĐ)</label>
+                  <input type="number" id="adm-rt-price" class="form-control" min="1000" step="1000" required>
+                </div>
+                <div class="col-md-6 form-group">
+                  <label for="adm-rt-capacity" class="small font-weight-bold">Sức chứa tối đa (người)</label>
+                  <input type="number" id="adm-rt-capacity" class="form-control" min="1" max="20" value="2" required>
+                </div>
+              </div>
+              <div class="form-group mb-0">
+                <label for="adm-rt-desc" class="small font-weight-bold">Mô tả hạng phòng</label>
+                <textarea id="adm-rt-desc" class="form-control" rows="3" placeholder="Mô tả tiện nghi, tầm nhìn, đặc điểm nổi bật..."></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+              <button type="submit" class="btn btn-primary">Lưu hạng phòng</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/staff-common.js"></script>
+    <script src="../../js/feature2-common.js"></script>
+    <script src="../../js/admin-rooms.js"></script>
   </body>
 </html>
 

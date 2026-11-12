@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Deluxe - Receptionist - Check-in / Check-out</title>
@@ -51,31 +51,102 @@
 
     <section class="ftco-section bg-light">
       <div class="container">
-        <p class="mb-4">Quản lý danh sách phòng, đặt phòng, nhận và trả phòng</p>
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+          <div>
+            <h3 class="mb-1" style="font-family:'Playfair Display',serif">Nhận phòng &amp; Trả phòng</h3>
+            <p class="mb-0 text-muted">Thực hiện thủ tục Check-in (UC12) và Check-out (UC13) cho khách lưu trú</p>
+          </div>
+          <button type="button" id="btn-refresh-checkin" class="btn btn-outline-secondary">Làm mới dữ liệu</button>
+        </div>
 
-      <div class="table-responsive bg-white p-3">
-        <table class="table table-hover mb-0">
-          <thead>
-          <tr>
-            <th>Mã</th>
-            <th>Khách hàng</th>
-            <th>Phòng</th>
-            <th>Hạng phòng</th>
-            <th>Thao tác</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr><td>B002</td><td>Tran Thi B</td><td>201</td><td>Nhận phòng</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Nhận phòng</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Trả phòng</button></td></tr>
-          <tr><td>B000</td><td>Le Van C</td><td>102</td><td>Trả phòng</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Nhận phòng</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Trả phòng</button></td></tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="row">
+          <div class="col-6 col-md-3 mb-4"><div class="bg-white p-3 text-center rounded shadow-sm"><h3 class="mb-1 text-danger" id="stat-ci-today" style="font-family:'Playfair Display',serif">0</h3><p class="mb-0 small text-muted">Chờ nhận phòng hôm nay</p></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="bg-white p-3 text-center rounded shadow-sm"><h3 class="mb-1 text-primary" id="stat-ci-all" style="font-family:'Playfair Display',serif">0</h3><p class="mb-0 small text-muted">Tổng chờ Check-in</p></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="bg-white p-3 text-center rounded shadow-sm"><h3 class="mb-1 text-warning" id="stat-co-today" style="font-family:'Playfair Display',serif">0</h3><p class="mb-0 small text-muted">Trả phòng hôm nay</p></div></div>
+          <div class="col-6 col-md-3 mb-4"><div class="bg-white p-3 text-center rounded shadow-sm"><h3 class="mb-1 text-success" id="stat-co-all" style="font-family:'Playfair Display',serif">0</h3><p class="mb-0 small text-muted">Đang lưu trú</p></div></div>
+        </div>
+
+        <div id="checkin-alert" class="alert d-none" role="alert"></div>
+
+        <div class="bg-white p-3 mb-3 rounded shadow-sm">
+          <div class="row align-items-center">
+            <div class="col-md-5 mb-2 mb-md-0">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-sm btn-primary chk-tab-btn" data-tab="CHECKIN">Chờ nhận phòng (Check-in)</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary chk-tab-btn" data-tab="CHECKOUT">Đang lưu trú (Check-out)</button>
+              </div>
+            </div>
+            <div class="col-md-3 mb-2 mb-md-0">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="chk-only-today">
+                <label class="form-check-label small font-weight-bold" for="chk-only-today">Chỉ hiển thị lịch hôm nay</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <input type="text" id="chk-search" class="form-control form-control-sm" placeholder="Tìm mã đơn, tên khách, số phòng...">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive bg-white p-3 rounded shadow-sm">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Khách hàng</th>
+                <th>Phòng &amp; TT Phòng</th>
+                <th>Hạng phòng</th>
+                <th>Thời gian</th>
+                <th>TT Đơn</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="checkin-checkout-tbody">
+              <tr><td colspan="7" class="text-center py-4 text-muted">Đang tải danh sách Check-in / Check-out...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
+    <!-- Modal Chi tiết -->
+    <div class="modal fade" id="chkDetailModal" tabindex="-1" role="dialog" aria-labelledby="chkDetailTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title text-white" id="chkDetailTitle">Thông tin lưu trú <span id="chk-dt-id"></span></h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Đóng">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-sm table-borderless mb-0">
+              <tbody>
+                <tr><th style="width:36%">Trạng thái:</th><td id="chk-dt-status"></td></tr>
+                <tr><th>Khách hàng:</th><td id="chk-dt-customer"></td></tr>
+                <tr><th>Phòng:</th><td id="chk-dt-room" class="font-weight-bold"></td></tr>
+                <tr><th>Thời gian:</th><td id="chk-dt-dates"></td></tr>
+                <tr><th>Tổng tiền phòng:</th><td id="chk-dt-total" class="font-weight-bold text-primary"></td></tr>
+                <tr><th>Tiền cọc:</th><td id="chk-dt-deposit"></td></tr>
+                <tr><th>Ngày tạo đơn:</th><td id="chk-dt-created"></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
     <script src="../../js/staff-common.js"></script>
+    <script src="../../js/feature2-common.js"></script>
+    <script src="../../js/reception-checkin.js"></script>
   </body>
 </html>
 

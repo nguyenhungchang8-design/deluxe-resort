@@ -43,4 +43,21 @@ public class Booking {
     @Column(name = "created_at", nullable = false)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public Long getCustomerId() { return customerId; }
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
+    public Long getRoomId() { return roomId; }
+    public void setRoomId(Long roomId) { this.roomId = roomId; }
+    public LocalDate getCheckIn() { return checkIn; }
+    public void setCheckIn(LocalDate checkIn) { this.checkIn = checkIn; }
+    public LocalDate getCheckOut() { return checkOut; }
+    public void setCheckOut(LocalDate checkOut) { this.checkOut = checkOut; }
+    public BookingStatus getStatus() { return status; }
+    public void setStatus(BookingStatus status) { this.status = status; }
+    public BigDecimal getDeposit() { return deposit; }
+    public void setDeposit(BigDecimal deposit) { this.deposit = deposit; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

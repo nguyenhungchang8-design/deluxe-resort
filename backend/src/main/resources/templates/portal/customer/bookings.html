@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <title>Đặt phòng của tôi - Deluxe Resort</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/animate.css">
+    <link rel="stylesheet" href="../../css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../../css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="../../css/magnific-popup.css">
+    <link rel="stylesheet" href="../../css/aos.css">
+    <link rel="stylesheet" href="../../css/ionicons.min.css">
+    <link rel="stylesheet" href="../../css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../../css/jquery.timepicker.css">
+    <link rel="stylesheet" href="../../css/flaticon.css">
+    <link rel="stylesheet" href="../../css/icomoon.css">
+    <link rel="stylesheet" href="../../css/style.css">
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand" href="home.html">Deluxe</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="home.html" class="nav-link">Trang chủ</a></li>
+            <li class="nav-item"><a href="rooms.html" class="nav-link">Phòng nghỉ</a></li>
+            <li class="nav-item active"><a href="bookings.html" class="nav-link">Đặt phòng của tôi</a></li>
+            <li class="nav-item"><a href="restaurant.html" class="nav-link">Nhà hàng</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-link">Giới thiệu</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg');">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
+          <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+            <div class="text">
+              <p class="breadcrumbs mb-2"><span class="mr-2"><a href="home.html">Trang chủ</a></span> <span>Đặt phòng của tôi</span></p>
+              <h1 class="mb-4 bread">Lịch sử đặt phòng</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="ftco-section bg-light">
+      <div class="container">
+        <!-- Thống kê nhanh -->
+        <div class="row mb-4">
+          <div class="col-6 col-md-3 mb-3">
+            <div class="card border-0 shadow-sm text-center p-3 h-100">
+              <small class="text-muted text-uppercase">Tổng đơn đặt</small>
+              <h3 class="mb-0 mt-1 text-dark" id="my-stat-total">0</h3>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-3">
+            <div class="card border-0 shadow-sm text-center p-3 h-100">
+              <small class="text-muted text-uppercase">Chờ xác nhận</small>
+              <h3 class="mb-0 mt-1 text-warning" id="my-stat-pending">0</h3>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-3">
+            <div class="card border-0 shadow-sm text-center p-3 h-100">
+              <small class="text-muted text-uppercase">Đã xác nhận</small>
+              <h3 class="mb-0 mt-1 text-primary" id="my-stat-confirmed">0</h3>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-3">
+            <div class="card border-0 shadow-sm text-center p-3 h-100">
+              <small class="text-muted text-uppercase">Đang lưu trú</small>
+              <h3 class="mb-0 mt-1 text-success" id="my-stat-checkedin">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bộ lọc & nút đặt phòng -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-body d-flex flex-wrap justify-content-between align-items-center">
+            <div class="btn-group flex-wrap mb-2 mb-md-0" role="group" aria-label="Lọc trạng thái đơn đặt phòng">
+              <button type="button" class="btn btn-sm btn-primary mr-1 mb-1 booking-filter-tab" data-status="ALL">Tất cả</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary mr-1 mb-1 booking-filter-tab" data-status="PENDING">Chờ xác nhận</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary mr-1 mb-1 booking-filter-tab" data-status="CONFIRMED">Đã xác nhận</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary mr-1 mb-1 booking-filter-tab" data-status="CHECKED_IN">Đang lưu trú</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary mr-1 mb-1 booking-filter-tab" data-status="CHECKED_OUT">Đã trả phòng</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary mb-1 booking-filter-tab" data-status="CANCELLED">Đã hủy</button>
+            </div>
+            <a href="rooms.html" class="btn btn-primary btn-sm px-3">+ Đặt phòng mới</a>
+          </div>
+        </div>
+
+        <div id="customer-bookings-alert" class="alert d-none" role="alert"></div>
+
+        <!-- Bảng danh sách đặt phòng -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Mã đơn</th>
+                    <th>Phòng &amp; Hạng phòng</th>
+                    <th>Thời gian lưu trú</th>
+                    <th>Tổng tiền phòng</th>
+                    <th>Tiền cọc</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="customer-bookings-tbody">
+                  <tr>
+                    <td colspan="7" class="text-center py-4 text-muted">Đang tải lịch sử đặt phòng...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal chi tiết đơn đặt phòng -->
+    <div class="modal fade" id="customerBookingDetailModal" tabindex="-1" role="dialog" aria-labelledby="customerBookingDetailTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title text-white" id="customerBookingDetailTitle">Chi tiết đặt phòng <span id="cus-dt-id"></span></h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Đóng">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-sm table-borderless mb-0">
+              <tbody>
+                <tr>
+                  <th style="width: 38%;">Trạng thái:</th>
+                  <td id="cus-dt-status"></td>
+                </tr>
+                <tr>
+                  <th>Phòng:</th>
+                  <td id="cus-dt-room" class="font-weight-bold"></td>
+                </tr>
+                <tr>
+                  <th>Nhận / Trả phòng:</th>
+                  <td id="cus-dt-dates"></td>
+                </tr>
+                <tr>
+                  <th>Đơn giá / đêm:</th>
+                  <td id="cus-dt-rate"></td>
+                </tr>
+                <tr>
+                  <th>Tổng tiền phòng:</th>
+                  <td id="cus-dt-total" class="font-weight-bold text-primary"></td>
+                </tr>
+                <tr>
+                  <th>Tiền đặt cọc:</th>
+                  <td id="cus-dt-deposit"></td>
+                </tr>
+                <tr>
+                  <th>Ngày tạo đơn:</th>
+                  <td id="cus-dt-created"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="cus-dt-cancel-btn" class="btn btn-danger d-none">Hủy đặt phòng</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-5 mb-3 mb-md-0">
+            <h5 class="mb-1">Deluxe Resort</h5>
+            <p class="mb-0 text-muted small">Khu nghỉ dưỡng &amp; khách sạn cao cấp tiêu chuẩn quốc tế.</p>
+          </div>
+          <div class="col-md-4 mb-3 mb-md-0 text-md-center">
+            <a href="rooms.html" class="mr-3">Phòng</a>
+            <a href="bookings.html" class="mr-3">Đặt phòng</a>
+            <a href="restaurant.html" class="mr-3">Nhà hàng</a>
+            <a href="about.html">Giới thiệu</a>
+          </div>
+          <div class="col-md-3 text-md-right">
+            <div class="footer-social">
+              <a href="#" title="Facebook"><span class="icon-facebook"></span></a>
+              <a href="#" title="Twitter"><span class="icon-twitter"></span></a>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-12 text-center text-muted small">
+            &copy; <script>document.write(new Date().getFullYear());</script> Deluxe Resort Management System. All rights reserved. &bull; Hotline: +84 987 654 321
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+    <script src="../../js/jquery.easing.1.3.js"></script>
+    <script src="../../js/jquery.waypoints.min.js"></script>
+    <script src="../../js/jquery.stellar.min.js"></script>
+    <script src="../../js/owl.carousel.min.js"></script>
+    <script src="../../js/jquery.magnific-popup.min.js"></script>
+    <script src="../../js/aos.js"></script>
+    <script src="../../js/jquery.animateNumber.min.js"></script>
+    <script src="../../js/bootstrap-datepicker.js"></script>
+    <script src="../../js/jquery.timepicker.min.js"></script>
+    <script src="../../js/scrollax.min.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/auth.js"></script>
+    <script src="../../js/feature2-common.js"></script>
+    <script src="../../js/customer-bookings.js"></script>
+  </body>
+</html>
+
