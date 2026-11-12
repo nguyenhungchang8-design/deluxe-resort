@@ -48,5 +48,20 @@ SET password = N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy'
 WHERE username IN (N'customer', N'reception', N'housekeeping', N'accountant', N'waiter');
 GO
 
+-- 3. Thêm các tài khoản nhân viên buồng phòng mẫu để phân công nhiệm vụ
+IF NOT EXISTS (SELECT 1 FROM dbo.users WHERE username = N'housekeeping2')
+BEGIN
+    INSERT INTO dbo.users (username, email, password, full_name, role)
+    VALUES (N'housekeeping2', N'housekeeping2@deluxe.com', N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy', N'Nguyễn Thị Hoa', N'ROLE_HOUSEKEEPING');
+END
+
+IF NOT EXISTS (SELECT 1 FROM dbo.users WHERE username = N'housekeeping3')
+BEGIN
+    INSERT INTO dbo.users (username, email, password, full_name, role)
+    VALUES (N'housekeeping3', N'housekeeping3@deluxe.com', N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy', N'Lê Văn Nam', N'ROLE_HOUSEKEEPING');
+END
+GO
+
 PRINT N'Đã cập nhật database cho Feature 4 thành công!';
 GO
+

@@ -696,7 +696,7 @@ public class HousekeepingService {
     @Transactional(readOnly = true)
     public List<HousekeepingStaffDto> getHousekeepingStaff() {
         return userRepository.findAll().stream()
-                .filter(u -> "ROLE_HOUSEKEEPING".equals(u.getRole()) || "ROLE_ADMIN".equals(u.getRole()))
+                .filter(u -> "ROLE_HOUSEKEEPING".equals(u.getRole()))
                 .map(u -> HousekeepingStaffDto.builder()
                         .id(u.getId())
                         .username(u.getUsername())
