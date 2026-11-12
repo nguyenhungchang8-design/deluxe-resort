@@ -16,7 +16,7 @@ function ensureDeluxeDialogModal() {
 
   const wrapper = document.createElement('div');
   wrapper.innerHTML = `
-    <div class="modal fade" id="deluxeDialogModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1060;">
+    <div class="modal fade" id="deluxeDialogModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 2050;">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content shadow border-0">
           <div class="modal-header bg-dark text-white py-3">
@@ -28,7 +28,7 @@ function ensureDeluxeDialogModal() {
           <div class="modal-body p-4 text-dark" id="deluxeDialogMessage" style="font-size: 15px;"></div>
           <div class="modal-footer bg-light py-2">
             <button type="button" class="btn btn-secondary btn-sm px-3" id="deluxeDialogCancel" data-dismiss="modal">Hủy</button>
-            <button type="button" class="btn btn-primary btn-sm font-weight-bold px-3" id="deluxeDialogOk">OK</button>
+            <button type="button" class="btn btn-primary btn-sm font-weight-bold px-3" id="deluxeDialogOk" data-dismiss="modal">OK</button>
           </div>
         </div>
       </div>
@@ -54,31 +54,19 @@ function showDeluxeDialog(message, title, isConfirm) {
   if (cancelBtn) cancelBtn.style.display = isConfirm ? 'inline-block' : 'none';
 
   return new Promise(resolve => {
-    let settled = false;
+    let userConfirmed = false;
     const $modal = $(modalEl);
 
-    const cleanup = () => {
-      okBtn.removeEventListener('click', onOk);
-      $modal.off('hidden.bs.modal', onHidden);
-    };
+    // Xóa listener cũ và bắt sự kiện người dùng bấm nút OK
+    $(okBtn).off('click').one('click', function () {
+      userConfirmed = true;
+    });
 
-    const onOk = () => {
-      settled = true;
-      cleanup();
-      $modal.modal('hide');
-      resolve(true);
-    };
+    // Khi modal hoàn tất đóng (Bootstrap hidden.bs.modal):
+    $modal.off('hidden.bs.modal').one('hidden.bs.modal', function () {
+      resolve(isConfirm ? userConfirmed : true);
+    });
 
-    const onHidden = () => {
-      if (!settled) {
-        settled = true;
-        cleanup();
-        resolve(isConfirm ? false : true);
-      }
-    };
-
-    okBtn.addEventListener('click', onOk);
-    $modal.on('hidden.bs.modal', onHidden);
     $modal.modal('show');
   });
 }
