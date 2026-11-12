@@ -1,7 +1,10 @@
 // maintenance.js - Quản lý sự cố bảo trì phòng (100% Tiếng Việt, chuẩn template Deluxe Resort)
 let currentUser = null;
 let allMaintenanceData = [];
+let filteredMaintenanceData = [];
 let roomsList = [];
+const PAGE_SIZE = 5;
+let currentPage = 1;
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
@@ -108,26 +111,27 @@ async function loadMaintenanceRequests() {
   const tbody = document.getElementById('maintenance-tbody');
   const loading = document.getElementById('loading-indicator');
   const emptyState = document.getElementById('empty-state');
+  const paginationContainer = document.getElementById('pagination-container');
 
   if (loading) loading.style.display = 'block';
   if (emptyState) emptyState.style.display = 'none';
+  if (paginationContainer) paginationContainer.style.display = 'none';
   if (tbody) tbody.innerHTML = '';
 
   const filterStatus = document.getElementById('filter-status')?.value || 'ALL';
-  const filterRoomId = document.getElementById('filter-room-id')?.value || '';
+  const filterDate = document.getElementById('filter-date')?.value || '';
   const searchKeyword = (document.getElementById('search-keyword')?.value || '').trim().toLowerCase();
 
   try {
     const params = new URLSearchParams();
     if (filterStatus && filterStatus !== 'ALL') params.append('status', filterStatus);
-    if (filterRoomId) params.append('roomId', filterRoomId);
 
     const data = await apiFetch('/housekeeping/maintenance?' + params.toString());
     allMaintenanceData = data;
 
-    updateKpiCounters(data);
-
     let displayedData = data;
+
+    // Lọc theo từ khóa tìm kiếm (phòng, mô tả, người báo)
     if (searchKeyword) {
       displayedData = displayedData.filter(d => 
         (d.roomNumber && String(d.roomNumber).toLowerCase().includes(searchKeyword)) ||
@@ -136,14 +140,33 @@ async function loadMaintenanceRequests() {
       );
     }
 
+    // Lọc theo ngày
+    if (filterDate) {
+      displayedData = displayedData.filter(d => toLocalDateString(d.createdAt) === filterDate);
+    }
+
+    // Sắp xếp thời gian mới nhất lên trước
+    displayedData.sort((a, b) => {
+      const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      if (tb !== ta) return tb - ta;
+      return String(a.roomNumber || '').localeCompare(String(b.roomNumber || ''));
+    });
+
+    filteredMaintenanceData = displayedData;
+
     if (loading) loading.style.display = 'none';
 
-    if (!displayedData || displayedData.length === 0) {
+    if (!filteredMaintenanceData || filteredMaintenanceData.length === 0) {
       if (emptyState) emptyState.style.display = 'block';
       return;
     }
 
-    renderTable(displayedData);
+    const totalPages = Math.max(1, Math.ceil(filteredMaintenanceData.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    renderCurrentPage();
   } catch (err) {
     if (loading) loading.style.display = 'none';
     console.error('Lỗi tải danh sách sự cố:', err);
@@ -151,21 +174,71 @@ async function loadMaintenanceRequests() {
   }
 }
 
-function updateKpiCounters(data) {
-  const total = data.length;
-  const pending = data.filter(d => 'PENDING' === (d.status || '').toUpperCase()).length;
-  const inProgress = data.filter(d => 'IN_PROGRESS' === (d.status || '').toUpperCase()).length;
-  const resolved = data.filter(d => 'RESOLVED' === (d.status || '').toUpperCase() || 'CLOSED' === (d.status || '').toUpperCase()).length;
+function toLocalDateString(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return '';
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
 
-  const elTotal = document.getElementById('kpi-total-issues');
-  const elPending = document.getElementById('kpi-pending-issues');
-  const elInProgress = document.getElementById('kpi-inprogress-issues');
-  const elResolved = document.getElementById('kpi-resolved-issues');
+function renderCurrentPage() {
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filteredMaintenanceData.slice(start, start + PAGE_SIZE);
+  renderTable(pageItems);
+  renderPagination();
+}
 
-  if (elTotal) elTotal.textContent = total;
-  if (elPending) elPending.textContent = pending;
-  if (elInProgress) elInProgress.textContent = inProgress;
-  if (elResolved) elResolved.textContent = resolved;
+function renderPagination() {
+  const container = document.getElementById('pagination-container');
+  const infoEl = document.getElementById('pagination-info');
+  const controlsEl = document.getElementById('pagination-controls');
+  if (!container || !infoEl || !controlsEl) return;
+
+  const total = filteredMaintenanceData.length;
+  if (total === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const startItem = (currentPage - 1) * PAGE_SIZE + 1;
+  const endItem = Math.min(currentPage * PAGE_SIZE, total);
+
+  container.style.display = 'flex';
+  infoEl.textContent = `Hiển thị ${startItem}-${endItem} trên tổng số ${total} sự cố`;
+
+  let html = `
+    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+      <a class="page-link" href="#" data-page="${currentPage - 1}">Trước</a>
+    </li>
+  `;
+
+  for (let p = 1; p <= totalPages; p++) {
+    html += `
+      <li class="page-item ${p === currentPage ? 'active' : ''}">
+        <a class="page-link" href="#" data-page="${p}">${p}</a>
+      </li>
+    `;
+  }
+
+  html += `
+    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+      <a class="page-link" href="#" data-page="${currentPage + 1}">Sau</a>
+    </li>
+  `;
+
+  controlsEl.innerHTML = html;
+  controlsEl.querySelectorAll('a.page-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetPage = parseInt(e.currentTarget.dataset.page);
+      if (!isNaN(targetPage) && targetPage >= 1 && targetPage <= totalPages && targetPage !== currentPage) {
+        currentPage = targetPage;
+        renderCurrentPage();
+      }
+    });
+  });
 }
 
 function renderTable(list) {
@@ -519,35 +592,37 @@ function setupEventListeners() {
     await updateMaintenanceStatus(id, nextStatus);
   });
 
-  document.getElementById('filter-status')?.addEventListener('change', () => loadMaintenanceRequests());
-  document.getElementById('filter-room-id')?.addEventListener('change', () => loadMaintenanceRequests());
+  document.getElementById('filter-status')?.addEventListener('change', () => {
+    currentPage = 1;
+    loadMaintenanceRequests();
+  });
+  document.getElementById('filter-date')?.addEventListener('change', () => {
+    currentPage = 1;
+    loadMaintenanceRequests();
+  });
+  document.getElementById('btn-clear-date')?.addEventListener('click', () => {
+    const dateInput = document.getElementById('filter-date');
+    if (dateInput) dateInput.value = '';
+    currentPage = 1;
+    loadMaintenanceRequests();
+  });
 
   const searchKeyword = document.getElementById('search-keyword');
   if (searchKeyword) {
     let debounceTimer;
     searchKeyword.addEventListener('input', () => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => loadMaintenanceRequests(), 250);
+      debounceTimer = setTimeout(() => {
+        currentPage = 1;
+        loadMaintenanceRequests();
+      }, 250);
     });
   }
 
   document.getElementById('btn-refresh')?.addEventListener('click', () => {
+    currentPage = 1;
     loadMaintenanceRequests();
     loadRooms();
-  });
-
-  const filterStatus = document.getElementById('filter-status');
-  document.getElementById('card-kpi-pending')?.addEventListener('click', () => {
-    if (filterStatus) { filterStatus.value = 'PENDING'; loadMaintenanceRequests(); }
-  });
-  document.getElementById('card-kpi-inprogress')?.addEventListener('click', () => {
-    if (filterStatus) { filterStatus.value = 'IN_PROGRESS'; loadMaintenanceRequests(); }
-  });
-  document.getElementById('card-kpi-resolved')?.addEventListener('click', () => {
-    if (filterStatus) { filterStatus.value = 'RESOLVED'; loadMaintenanceRequests(); }
-  });
-  document.getElementById('card-kpi-total')?.addEventListener('click', () => {
-    if (filterStatus) { filterStatus.value = 'ALL'; loadMaintenanceRequests(); }
   });
 }
 
