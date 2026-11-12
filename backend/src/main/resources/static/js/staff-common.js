@@ -54,17 +54,26 @@ function showDeluxeDialog(message, title, isConfirm) {
   if (cancelBtn) cancelBtn.style.display = isConfirm ? 'inline-block' : 'none';
 
   return new Promise(resolve => {
-    let userConfirmed = false;
+    let resolved = false;
     const $modal = $(modalEl);
 
-    // Xóa listener cũ và bắt sự kiện người dùng bấm nút OK
+    const finish = (result) => {
+      if (!resolved) {
+        resolved = true;
+        $(okBtn).off('click');
+        $modal.off('hidden.bs.modal');
+        resolve(result);
+      }
+    };
+
+    // Khi bấm OK -> lập tức hoàn tất với true và để Bootstrap tự ẩn modal
     $(okBtn).off('click').one('click', function () {
-      userConfirmed = true;
+      finish(true);
     });
 
-    // Khi modal hoàn tất đóng (Bootstrap hidden.bs.modal):
+    // Khi modal đóng mà chưa từng bấm OK (bấm Hủy, x hoặc click ra ngoài) -> hoàn tất với false
     $modal.off('hidden.bs.modal').one('hidden.bs.modal', function () {
-      resolve(isConfirm ? userConfirmed : true);
+      finish(false);
     });
 
     $modal.modal('show');
