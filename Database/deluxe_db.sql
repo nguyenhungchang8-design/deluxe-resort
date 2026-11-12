@@ -58,6 +58,7 @@ CREATE TABLE dbo.users (
     password    NVARCHAR(255)        NOT NULL,
     full_name   NVARCHAR(100)        NULL,
     role        NVARCHAR(30)         NOT NULL DEFAULT 'ROLE_CUSTOMER',
+    active      BIT                  NOT NULL DEFAULT 1,
     CONSTRAINT PK_users PRIMARY KEY CLUSTERED (id ASC),
     CONSTRAINT UQ_users_username UNIQUE (username),
     CONSTRAINT UQ_users_email UNIQUE (email),
