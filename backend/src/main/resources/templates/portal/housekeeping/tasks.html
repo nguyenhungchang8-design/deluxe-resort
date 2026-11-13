@@ -1,21 +1,47 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="vi">
   <head>
-    <title>Deluxe - Housekeeping - Cleaning Tasks</title>
+    <title>Deluxe - Quản lý dọn phòng</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="../../css/animate.css">
     <link rel="stylesheet" href="../../css/ionicons.min.css">
     <link rel="stylesheet" href="../../css/flaticon.css">
     <link rel="stylesheet" href="../../css/icomoon.css">
     <link rel="stylesheet" href="../../css/style.css">
+    <style>
+      .kpi-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+      }
+      .kpi-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      }
+      .table th {
+        background-color: #2c3e50;
+        color: #ffffff;
+        font-weight: 600;
+        border: none;
+      }
+      .badge {
+        font-size: 0.85rem;
+      }
+      #user-name {
+        white-space: nowrap;
+      }
+      .ftco_navbar .navbar-nav .nav-link {
+        white-space: nowrap;
+      }
+    </style>
   </head>
-  <body data-roles="ROLE_HOUSEKEEPING">
+  <body data-roles="ROLE_HOUSEKEEPING,ROLE_RECEPTIONIST">
 
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
       <div class="container">
         <a class="navbar-brand" href="tasks.html">Deluxe</a>
@@ -23,62 +49,293 @@
           <span class="oi oi-menu"></span> Menu
         </button>
         <div class="collapse navbar-collapse" id="ftco-nav">
-          <ul class="navbar-nav ml-auto">
-          <li class="nav-item active"><a href="tasks.html" class="nav-link">Nhiệm vụ dọn phòng</a></li>
-          <li class="nav-item"><a href="maintenance.html" class="nav-link">Bảo trì thiết bị</a></li>
-          <li class="nav-item"><span class="nav-link" id="user-name"></span></li>
-          <li class="nav-item"><a href="#" class="nav-link" id="btn-logout">Đăng xuất</a></li>
+          <ul class="navbar-nav mr-auto" id="role-nav-items">
+            <!-- Render theo quyền vai trò -->
+            <li class="nav-item active"><a href="tasks.html" class="nav-link font-weight-bold">Quản lý dọn phòng</a></li>
+            <li class="nav-item"><a href="maintenance.html" class="nav-link">Bảo trì phòng</a></li>
+          </ul>
+          <ul class="navbar-nav ml-auto align-items-center">
+            <li class="nav-item mr-2"><span class="nav-link text-white font-weight-500" id="user-name"></span></li>
+            <li class="nav-item"><a href="#" class="nav-link btn btn-outline-light btn-sm my-2 px-3 text-white" id="btn-logout" style="line-height: 1.5;">Đăng xuất</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 300px;">
+    <!-- Hero Header -->
+    <div class="hero-wrap" style="background-image: url('../../images/bg_1.jpg'); height: 260px;">
       <div class="overlay"></div>
       <div class="container">
-        <div class="row no-gutters slider-text d-flex align-itemd-end justify-content-center">
-          <div class="col-md-9 text-center d-flex align-items-end justify-content-center">
+        <div class="row no-gutters slider-text d-flex align-items-end justify-content-center" style="height: 260px;">
+          <div class="col-md-9 text-center d-flex align-items-end justify-content-center pb-4">
             <div class="text">
-              <p class="breadcrumbs mb-2"><span>Buồng phòng</span></p>
-              <h1 class="mb-4 bread">Nhiệm vụ dọn phòng</h1>
+              <p class="breadcrumbs mb-2"><span id="bread-role">Buồng phòng &amp; Lễ tân</span> &gt; <span>Dọn phòng</span></p>
+              <h1 class="mb-2 bread" id="page-main-title">Quản lý dọn phòng</h1>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <section class="ftco-section bg-light">
+    <!-- Main Content -->
+    <section class="ftco-section bg-light py-5">
       <div class="container">
-        <p class="mb-4">Quản lý công việc dọn dẹp buồng phòng và bảo trì thiết bị</p>
-      <div class="row">
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">4</h3><p class="mb-0">Chờ dọn dẹp</p></div></div>
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">2</h3><p class="mb-0">Đang dọn dẹp</p></div></div>
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">9</h3><p class="mb-0">Hoàn thành hôm nay</p></div></div>
-        <div class="col-md-3 mb-4"><div class="bg-white p-4 text-center"><h3 class="mb-1" style="font-family:'Playfair Display',serif">1</h3><p class="mb-0">Yêu cầu bảo trì</p></div></div>
-      </div>
-      <div class="table-responsive bg-white p-3">
-        <table class="table table-hover mb-0">
-          <thead>
-          <tr>
-            <th>Phòng</th>
-            <th>Tầng</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr><td>201</td><td>2</td><td>Cho don</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Nhan viec</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Bat dau</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Hoan thanh</button></td></tr>
-          <tr><td>305</td><td>3</td><td>Dang don</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Nhan viec</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Bat dau</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Hoan thanh</button></td></tr>
-          <tr><td>102</td><td>1</td><td>Cho don</td><td><button class="btn btn-primary btn-sm mr-1 mb-1">Nhan viec</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Bat dau</button> <button class="btn btn-primary btn-sm mr-1 mb-1">Hoan thanh</button></td></tr>
-          </tbody>
-        </table>
-      </div>
+
+        <!-- Alert Notification -->
+        <div id="alert-container"></div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+          <!-- Nhóm nút chuyển chế độ xem: Chỉ hiển thị cho Buồng phòng -->
+          <div class="d-none align-items-center mb-2 mb-md-0" id="task-filter-buttons">
+            <div class="btn-group shadow-sm" role="group">
+              <button type="button" class="btn btn-primary font-weight-bold btn-sm active px-3" id="btn-view-all">
+                <i class="oi oi-list mr-1"></i>Tất cả phòng cần dọn
+              </button>
+              <button type="button" class="btn btn-outline-primary font-weight-bold btn-sm px-3" id="btn-view-my-tasks">
+                <i class="oi oi-person mr-1"></i>Nhiệm vụ của tôi
+                <span class="badge badge-warning ml-1 font-weight-bold text-dark" id="my-tasks-badge" style="display:none; font-size: 0.8rem;">0</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-2 mt-md-0 ml-auto">
+            <!-- Nút Tạo nhiệm vụ dọn phòng -->
+            <button class="btn btn-primary font-weight-bold mr-2 shadow-sm" id="btn-open-create-modal" style="display:none;">
+              <i class="oi oi-plus mr-1"></i>Tạo nhiệm vụ dọn phòng
+            </button>
+            <a href="maintenance.html" class="btn btn-outline-danger btn-sm mr-2 font-weight-bold">
+              <i class="oi oi-wrench mr-1"></i>Báo cáo bảo trì
+            </a>
+            <button class="btn btn-outline-secondary btn-sm" id="btn-refresh">
+              <i class="oi oi-reload mr-1"></i>Làm mới
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter & Search Card (100% Tiếng Việt) -->
+        <div class="card mb-4 border-0 shadow-sm">
+          <div class="card-body p-3">
+            <div class="row align-items-center">
+              <!-- Tìm kiếm theo số phòng -->
+              <div class="col-md-4 col-sm-12 mb-2 mb-md-0">
+                <label class="small font-weight-bold text-muted mb-1">Tìm kiếm theo số phòng:</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text bg-white"><i class="oi oi-magnifying-glass"></i></span>
+                  </div>
+                  <input type="text" class="form-control" id="search-room" placeholder="Nhập số phòng (vd: 101, 102, 201)...">
+                </div>
+              </div>
+
+              <!-- Lọc theo tiến độ dọn dẹp -->
+              <div class="col-md-4 col-sm-6 mb-2 mb-md-0">
+                <label class="small font-weight-bold text-muted mb-1">Lọc theo tiến độ dọn dẹp:</label>
+                <select class="form-control" id="filter-status">
+                  <option value="ALL_ACTIVE" selected>Phòng cần dọn (Chờ dọn &amp; Đang dọn)</option>
+                  <option value="PENDING">Chờ dọn</option>
+                  <option value="IN_PROGRESS">Đang dọn</option>
+                  <option value="DONE">Dọn xong</option>
+                  <option value="ALL">Tất cả tiến độ</option>
+                </select>
+              </div>
+
+              <!-- Lọc theo ngày -->
+              <div class="col-md-4 col-sm-6 mb-2 mb-md-0">
+                <label class="small font-weight-bold text-muted mb-1" for="filter-date">Lọc theo ngày:</label>
+                <div class="input-group">
+                  <input type="date" class="form-control" id="filter-date">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="btn-clear-date" title="Xóa lọc ngày">&times;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Data: SỬA CÁI BẢNG (Đúng 6 cột theo thứ tự) -->
+        <div class="bg-white p-3 rounded shadow-sm">
+          <!-- Loading Spinner -->
+          <div id="loading-indicator" class="text-center py-5" style="display:none;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Đang tải...</span>
+            </div>
+            <p class="mt-2 text-muted">Đang nạp danh sách phòng...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div id="empty-state" class="text-center py-5" style="display:none;">
+            <div class="mb-3 text-muted">
+              <i class="oi oi-circle-check" style="font-size: 3rem; color: #28a745;"></i>
+            </div>
+            <h5 class="text-dark font-weight-bold">Không tìm thấy phòng nào phù hợp!</h5>
+            <p class="text-muted" id="empty-state-msg">Tất cả các phòng đã được dọn sạch sẽ hoặc không khớp với bộ lọc.</p>
+          </div>
+
+          <!-- Bảng đúng 6 cột: Mã phòng | Loại phòng | Thời gian giao | Trạng thái phòng | Người dọn | Thao tác -->
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th style="width: 14%;">Mã phòng</th>
+                  <th style="width: 18%;">Loại phòng</th>
+                  <th style="width: 20%;">Thời gian giao</th>
+                  <th style="width: 20%;">Trạng thái phòng</th>
+                  <th style="width: 16%;">Người dọn</th>
+                  <th style="width: 12%; text-align: right;">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="rooms-tbody">
+                <!-- Nạp động qua JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Phân trang (5 giá trị / trang) -->
+          <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top flex-wrap" id="pagination-container" style="display:none;">
+            <small class="text-muted mb-2 mb-sm-0" id="pagination-info"></small>
+            <nav aria-label="Phân trang danh sách dọn phòng">
+              <ul class="pagination pagination-sm mb-0" id="pagination-controls"></ul>
+            </nav>
+          </div>
+        </div>
+
       </div>
     </section>
 
+    <!-- Modal Tạo Nhiệm Vụ Dọn Phòng -->
+    <div class="modal fade" id="createTaskModal" tabindex="-1" role="dialog" aria-labelledby="createTaskModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title text-white font-weight-bold" id="createTaskModalLabel">
+              <i class="oi oi-task mr-1"></i>Tạo nhiệm vụ dọn phòng
+            </h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="form-group mb-3">
+              <label class="font-weight-bold" for="modal-create-room">
+                1. Chọn phòng cần dọn dẹp: <span class="text-danger">*</span>
+              </label>
+              <select class="form-control custom-select" id="modal-create-room">
+                <option value="">-- Đang nạp danh sách phòng --</option>
+              </select>
+              <small class="form-text text-muted">Chọn phòng cần dọn (khách vừa trả phòng hoặc phòng có yêu cầu dọn).</small>
+            </div>
+
+            <div class="form-group mb-3">
+              <label class="font-weight-bold" for="modal-create-staff">
+                2. Phân công nhân viên buồng phòng <span class="text-muted small font-weight-normal">(tùy chọn)</span>:
+              </label>
+              <select class="form-control custom-select" id="modal-create-staff">
+                <option value="">-- Chưa phân công (buồng phòng tự nhận) --</option>
+              </select>
+              <small class="form-text text-muted">Có thể để trống để nhân viên buồng phòng chủ động nhận nhiệm vụ trên danh sách.</small>
+            </div>
+          </div>
+          <div class="modal-footer bg-light">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Hủy bỏ</button>
+            <button type="button" class="btn btn-primary btn-sm font-weight-bold px-3" id="btn-save-create-task">
+              <i class="oi oi-check mr-1"></i>Tạo nhiệm vụ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Chỉnh Sửa Phân Công (Nút Sửa) -->
+    <div class="modal fade" id="editTaskModal" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow border-0">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title font-weight-bold text-white" id="editTaskModalLabel">
+              <i class="oi oi-pencil mr-1"></i>Chỉnh sửa phân công dọn phòng
+            </h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4">
+            <input type="hidden" id="modal-edit-task-id">
+            <input type="hidden" id="modal-edit-room-id">
+            
+            <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded border">
+              <div>
+                <small class="text-muted d-block font-weight-bold">MÃ PHÒNG</small>
+                <h4 class="mb-0 text-primary font-weight-bold" id="modal-edit-room-number">--</h4>
+              </div>
+              <div class="text-right">
+                <small class="text-muted d-block font-weight-bold">TRẠNG THÁI HIỆN TẠI</small>
+                <span class="badge badge-warning p-2 font-weight-bold" id="modal-edit-current-status">--</span>
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label class="font-weight-bold" for="modal-edit-staff">
+                Phân công người dọn:
+              </label>
+              <select class="form-control custom-select" id="modal-edit-staff">
+                <option value="">-- Chưa phân công (buồng phòng tự nhận) --</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-2">
+              <label class="font-weight-bold" for="modal-edit-cleaning-status">
+                Tiến độ dọn phòng:
+              </label>
+              <select class="form-control custom-select" id="modal-edit-cleaning-status">
+                <option value="PENDING">Chờ dọn</option>
+                <option value="IN_PROGRESS">Đang dọn</option>
+                <option value="DONE">Dọn xong</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer bg-light d-flex justify-content-between">
+            <button type="button" class="btn btn-outline-danger btn-sm" id="btn-delete-task">
+              <i class="oi oi-trash mr-1"></i>Xóa nhiệm vụ
+            </button>
+            <div>
+              <button type="button" class="btn btn-secondary btn-sm mr-1" data-dismiss="modal">Hủy bỏ</button>
+              <button type="button" class="btn btn-primary btn-sm font-weight-bold px-3" id="btn-save-edit-task">
+                <i class="oi oi-check mr-1"></i>Lưu thay đổi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal xác nhận hoàn thành dọn phòng (Deluxe) -->
+    <div class="modal fade" id="confirmCompleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content shadow border-0">
+          <div class="modal-header bg-dark text-white py-3">
+            <h5 class="modal-title font-weight-bold text-white mb-0">Deluxe</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Đóng">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body p-4 text-dark" style="font-size: 15px;">
+            Xác nhận phòng <strong id="confirm-room-number">--</strong> đã được dọn sạch sẽ và sẵn sàng đón khách?
+          </div>
+          <div class="modal-footer bg-light py-2">
+            <button type="button" class="btn btn-secondary btn-sm px-3" data-dismiss="modal">Hủy</button>
+            <button type="button" class="btn btn-primary btn-sm font-weight-bold px-3" id="btn-confirm-complete-ok">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
     <script src="../../js/api.js"></script>
     <script src="../../js/auth.js"></script>
-    <script src="../../js/staff-common.js"></script>
+    <script src="../../js/staff-common.js?v=20261113_3"></script>
+    <script src="../../js/housekeeping-tasks.js?v=20261113_3"></script>
   </body>
 </html>
-

@@ -99,6 +99,7 @@ CREATE TABLE dbo.rooms (
     CONSTRAINT FK_rooms_room_type FOREIGN KEY (room_type_id) REFERENCES dbo.room_types(id),
     CONSTRAINT CHK_rooms_status CHECK (status IN (
         'AVAILABLE',    -- Phòng trống
+        'READY',        -- Sẵn sàng đón khách
         'BOOKED',       -- Đã được đặt
         'OCCUPIED',     -- Đang có khách ở
         'CLEANING',     -- Đang dọn dẹp
@@ -296,12 +297,14 @@ GO
 -- 1. Chèn người dùng mẫu cho đủ 5 vai trò (Password BCrypt: admin123 cho admin, 123456 cho tài khoản khác)
 SET IDENTITY_INSERT dbo.users ON;
 INSERT INTO dbo.users (id, username, email, password, full_name, role) VALUES
-(1, N'admin',       N'admin@deluxe.com',        N'$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQabh42', N'Quản Trị Viên',        N'ROLE_ADMIN'),
-(2, N'customer',    N'customer@deluxe.com',     N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Nguyễn Văn Khách',     N'ROLE_CUSTOMER'),
-(3, N'reception',   N'reception@deluxe.com',    N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Lê Thị Lễ Tân',        N'ROLE_RECEPTIONIST'),
-(4, N'housekeeping',N'housekeeping@deluxe.com', N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Trần Văn Buồng Phòng', N'ROLE_HOUSEKEEPING'),
-(5, N'accountant',  N'accountant@deluxe.com',   N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Phạm Thu Kế Toán',     N'ROLE_ACCOUNTANT'),
-(6, N'waiter',      N'waiter@deluxe.com',       N'$2a$10$wT0EmsmB5kS241.j44oK9ePj5u8t9UqBvB5JdE8v3lGvC.bQ9v5Gy', N'Hoàng Phục Vụ',        N'ROLE_WAITER');
+(1, N'admin',       N'admin@deluxe.com',        N'$2a$10$5zOBa9Opt.ZSbEoXJXDStO1fnlbkyEUerK3jl7qx6l2KTmLy0xh5G', N'Quản Trị Viên',        N'ROLE_ADMIN'),
+(2, N'customer',    N'customer@deluxe.com',     N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy', N'Nguyễn Văn Khách',     N'ROLE_CUSTOMER'),
+(3, N'reception',   N'reception@deluxe.com',    N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy', N'Lê Thị Lễ Tân',        N'ROLE_RECEPTIONIST'),
+(4, N'housekeeping',N'housekeeping@deluxe.com', N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy', N'Trần Văn Buồng Phòng', N'ROLE_HOUSEKEEPING'),
+(5, N'accountant',  N'accountant@deluxe.com',   N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy', N'Phạm Thu Kế Toán',     N'ROLE_ACCOUNTANT'),
+(6, N'waiter',      N'waiter@deluxe.com',       N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy', N'Hoàng Phục Vụ',        N'ROLE_WAITER'),
+(7, N'housekeeping2',N'housekeeping2@deluxe.com',N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy', N'Nguyễn Thị Hoa',       N'ROLE_HOUSEKEEPING'),
+(8, N'housekeeping3',N'housekeeping3@deluxe.com',N'$2a$10$MKyIuX.srH1HUiNrbt4zhu8rOLZ0O/a8Lg2Uz8HXHZiWMYEIfvZGy', N'Lê Văn Nam',          N'ROLE_HOUSEKEEPING');
 SET IDENTITY_INSERT dbo.users OFF;
 GO
 
@@ -369,8 +372,8 @@ GO
 -- 6. Công việc buồng phòng & Báo cáo bảo trì
 SET IDENTITY_INSERT dbo.cleaning_tasks ON;
 INSERT INTO dbo.cleaning_tasks (id, room_id, assigned_to, status, created_at) VALUES
-(1, 3, 4, 'IN_PROGRESS', DATEADD(hour, -2, SYSDATETIME())),
-(2, 4, 4, 'PENDING',     DATEADD(minute, -30, SYSDATETIME()));
+(1, 3, 4,    'IN_PROGRESS', DATEADD(hour, -2, SYSDATETIME())),
+(2, 4, NULL, 'PENDING',     DATEADD(minute, -30, SYSDATETIME()));
 SET IDENTITY_INSERT dbo.cleaning_tasks OFF;
 GO
 
